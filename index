@@ -1,0 +1,1405 @@
+{
+  "name": "My workflow 3",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 8
+            },
+            {
+              "triggerAtHour": 8
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        0
+      ],
+      "id": "ddc5372b-ac2a-4c4a-8881-3f3b5a59d344",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "url": "https://newsapi.org/v2/everything?q=marketing+tecnologia&language=pt&sortBy=publishedAt&apiKey=4b1f094a2b5f42ddaea4d6aedf248eba",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        208,
+        0
+      ],
+      "id": "1af8af64-a4f5-4b09-8ae5-7574619e905b",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4.1-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4.1-MINI"
+        },
+        "responses": {
+          "values": [
+            {
+              "content": "=Responda sempre em português brasileiro.\n\nVocê é um especialista em marketing digital. \nCom base na notícia abaixo, crie um post incrível para o Instagram com:\n\n- Texto envolvente de até 150 palavras\n- 5 hashtags relevantes\n- Emoji para deixar mais dinâmico\n- Call to action no final\n\nNotícia: {{ $json.articles[0].title }} - {{ $json.articles[0].description }}"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.1,
+      "position": [
+        416,
+        0
+      ],
+      "id": "38f4d439-4077-4c40-ab7f-991fe0bd9531",
+      "name": "Message a model",
+      "credentials": {
+        "openAiApi": {
+          "id": "xUQgHLvQEQMlyR24",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        128,
+        80
+      ],
+      "typeVersion": 1,
+      "id": "923a7cda-09d8-44af-aa1b-360d04604050",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "sendTo": "mitolegenda1@gmail.com",
+        "subject": " Post do dia - Marketing & Tecnologia",
+        "message": "={{ $('Message a model').item.json.output[0].content[0].text }}\n\n📰 Notícia original: {{ $('HTTP Request').item.json.articles[0].title }}\n🔗 Link: {{ $('HTTP Request').item.json.articles[0].url }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        768,
+        0
+      ],
+      "id": "3bde29f4-5af3-4741-aa5b-87affcc615be",
+      "name": "Send a message",
+      "webhookId": "df922d04-ad6d-49ed-8aef-933ffb0d57f5",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "zAFNIXmfUGanbQHy",
+          "name": "Gmail OAuth2 API"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "HTTP Request": [
+      {
+        "json": {
+          "status": "ok",
+          "totalResults": 304,
+          "articles": [
+            {
+              "source": {
+                "id": null,
+                "name": "Treta.com.br"
+              },
+              "author": "Ivo Neuman",
+              "title": "O Futuro da Criação Audiovisual com IA: Como Transformar Ideias em Vídeos Incríveis",
+              "description": "Nos últimos anos, a tecnologia avançou de forma impressionante, especialmente no campo da inteligência artificial. Uma das áreas mais impactadas por essa evolução é a produção de conteúdo audiovisual. Hoje, qualquer pessoa pode criar vídeos de alta qualidade …",
+              "url": "https://www.treta.com.br/o-futuro-da-criacao-audiovisual-com-ia-como-transformar-ideias-em-videos-incriveis/",
+              "urlToImage": "https://www.treta.com.br/wp-content/uploads/2026/04/20260403-ia-inteligencia-artificial-1024x1024.png",
+              "publishedAt": "2026-04-03T13:59:13Z",
+              "content": "Nos últimos anos, a tecnologia avançou de forma impressionante, especialmente no campo da inteligência artificial. Uma das áreas mais impactadas por essa evolução é a produção de conteúdo audiovisual… [+5706 chars]"
+            },
+            {
+              "source": {
+                "id": null,
+                "name": "Ig.com.br"
+              },
+              "author": "Juliana Franco, Juliana Franco",
+              "title": "Mais verba, mesma dúvida: o que o marketing realmente entrega?",
+              "description": "Levantamento aponta que 27% dos profissionais não conseguem justificar o valor do próprio trabalho e IA ainda enfrenta barreira de capacitação",
+              "url": "https://ultimosegundo.ig.com.br/colunas/ideia-e-meio/2026-04-03/mais-verba--mesma-duvida--o-que-o-marketing-realmente-entrega-.html",
+              "urlToImage": "https://i0.statig.com.br/bancodeimagens/4z/70/ie/4z70ieo7qipsjzfib41brkkyf.jpg",
+              "publishedAt": "2026-04-03T13:00:52Z",
+              "content": "O marketing nunca teve tanto recurso e nunca foi tão cobrado. É o que revela a pesquisa \"Tendências de Marketing para 2026\", da Opinion Box em parceria com a VCRP. Se durante anos a área lutou para c… [+2314 chars]"
+            },
+            {
+              "source": {
+                "id": null,
+                "name": "Edivaldobrito.com.br"
+              },
+              "author": "Edivaldo Brito",
+              "title": "Sony pode abandonar jogos de PC mesmo após lucro de $300 milhões",
+              "description": "PlayStation teve lucros significativos em vendas de PC Games, mas Sony quer voltar a exclusividade.\nO post Sony pode abandonar jogos de PC mesmo após lucro de $300 milhões apareceu primeiro em Blog do Edivaldo - Informações e Notícias sobre Linux.",
+              "url": "https://www.edivaldobrito.com.br/sony-pode-abandonar-jogos-de-pc-mesmo-apos-lucro-de-300-milhoes/",
+              "urlToImage": null,
+              "publishedAt": "2026-04-03T09:59:45Z",
+              "content": "O mercado de jogos está evoluindo, com um foco crescente em jogos multiplataforma que permitem a acessibilidade e inclusão para mais jogadores. A Sony, entre outros desenvolvedores, tem investido em … [+10116 chars]"
+            },
+            {
+              "source": {
+                "id": null,
+                "name": "Edivaldobrito.com.br"
+              },
+              "author": "Edivaldo Brito",
+              "title": "Neuro N6: Desenvolvimento de Hardware com Inteligência Artificial em Alta",
+              "description": "Neuro N6 é uma nova placa de desenvolvimento que traz soluções de inteligência artificial para projetos de hardware e reconhecimento de imagem.\nO post Neuro N6: Desenvolvimento de Hardware com Inteligência Artificial em Alta apareceu primeiro em Blog do Ediva…",
+              "url": "https://www.edivaldobrito.com.br/neuro-n6-desenvolvimento-de-hardware-com-inteligencia-artificial-em-alta/",
+              "urlToImage": null,
+              "publishedAt": "2026-04-03T03:12:47Z",
+              "content": "A Neuro N6 é uma placa de desenvolvimento versátil ideal para projetos de inteligência artificial e automação. Com um design acessível, ela permite que iniciantes aprendam a programar facilmente, uti… [+9656 chars]"
+            },
+            {
+              "source": {
+                "id": null,
+                "name": "Terra.com.br"
+              },
+              "author": "Perfil Brasil",
+              "title": "Coliseu em SP: Exposição imersiva usa metaverso e IA para recriar a Roma Antiga",
+              "description": "Conheça a experiência \"figital\" que mistura cenografia real com batalhas de gladiadores em um ambiente digital interativo inédito",
+              "url": "https://www.terra.com.br/noticias/coliseu-em-sp-exposicao-imersiva-usa-metaverso-e-ia-para-recriar-a-roma-antiga,fe699b5fb30507bd0ca3c4af8e91336axoftd3dx.html",
+              "urlToImage": "https://p2.trrsf.com/image/fget/cf/1200/630/middle/images.terra.com/2026/04/03/2002988515-coliseu-em-sp-exposicao-imersiva-usa-metaverso-e-ia-para-recriar-a-roma-antiga.jpg",
+              "publishedAt": "2026-04-03T02:09:29Z",
+              "content": "A cidade de São Paulo recebe a estreia exclusiva de Coliseu: Exposição Imersiva, uma jornada tecnológica que transporta o público diretamente para o século I depois de Cristo. O evento inédito no Bra… [+2582 chars]"
+            },
+            {
+              "source": {
+                "id": null,
+                "name": "Revistabula.com"
+              },
+              "author": "Carlos Willian Leite",
+              "title": "As 30 cidades mais felizes do Brasil em 2026: ranking brasileiro inspirado em critérios da ONU",
+              "description": "A pesquisa foi desenvolvida como ranking inspirado no World Happiness Report, formulada como adaptação brasileira com dados públicos municipais e tratada como índice proxy municipal de felicidade. Essa definição fixa o alcance real do trabalho. O estudo não p…",
+              "url": "https://www.revistabula.com/157681-as-30-cidades-mais-felizes-do-brasil-em-2026-ranking-brasileiro-inspirado-em-criterios-da-onu/",
+              "urlToImage": "https://www.revistabula.com/wp/wp-content/uploads/2026/04/Jaragua-do-Sul-1.webp",
+              "publishedAt": "2026-04-02T22:29:49Z",
+              "content": "Medir felicidade em escala municipal exige método, escala comparável e controle sobre os próprios limites. O tema é atraente demais para admitir improviso. Sem desenho rigoroso, a discussão se perde … [+26069 chars]"
+            },
+            {
+              "source": {
+                "id": null,
+                "name": "Edivaldobrito.com.br"
+              },
+              "author": "Edivaldo Brito",
+              "title": "Expectativas para o Galaxy Z Flip 8 e Z Fold 8: Mudanças nas telas?",
+              "description": "Z Flip 8 pode vir sem atualizações significativas nas telas; descubra mais sobre isso!\nO post Expectativas para o Galaxy Z Flip 8 e Z Fold 8: Mudanças nas telas? apareceu primeiro em Blog do Edivaldo - Informações e Notícias sobre Linux.",
+              "url": "https://www.edivaldobrito.com.br/expectativas-para-o-galaxy-z-flip-8-e-z-fold-8-mudancas-nas-telas/",
+              "urlToImage": null,
+              "publishedAt": "2026-04-02T21:39:52Z",
+              "content": "Os novos modelos da Samsung, como o Galaxy Z Flip 8 e Z Fold 8, prometem inovações significativas em tecnologia de displays, durabilidade e design. Espera-se que esses smartphones tragam melhorias de… [+11534 chars]"
+            },
+            {
+              "source": {
+                "id": null,
+                "name": "Terra.com.br"
+              },
+              "author": "Estadão Conteúdo",
+              "title": "O que esperar do conteúdo sobre IA no São Paulo Innovation Week? Veja programação e palestrantes",
+              "description": "O evento em maio terá trilhas de programação dedicadas a esse tema, com debatedores como Guilherme Horn, head do WhatsApp no Brasil, e o futurista Neil Redding; veja como comprar ingressos",
+              "url": "https://www.terra.com.br/economia/o-que-esperar-do-conteudo-sobre-ia-no-sao-paulo-innovation-week-veja-programacao-e-palestrantes,38e9d8ea568c52c92892534358f56b6f0bjdwr95.html",
+              "urlToImage": "https://p2.trrsf.com/image/fget/cf/1200/630/middle/images.terra.com/2026/04/02/87360003-flgrycgr3jp2npmkbiyi5yyzbq.jpg",
+              "publishedAt": "2026-04-02T17:59:32Z",
+              "content": "O São Paulo Innovation Week (SPIW) terá uma agenda de conteúdo com mais de 2 mil palestrantes e 30 palcos simultâneos nos seus três dias de evento, ocupando a Mercado Livre Arena Pacaembu e a Fundaçã… [+3848 chars]"
+            },
+            {
+              "source": {
+                "id": "globo",
+                "name": "Globo"
+              },
+              "author": null,
+              "title": "Bradesco, Motiva, MSD e Siemens Energy abrem vagas de estágio",
+              "description": "Programas oferecem formação prática, mentoria e atuação em projetos para estudantes de diversas regiões do Brasil",
+              "url": "https://valor.globo.com/carreira/empregos-oportunidades/post/2026/04/bradesco-motiva-msd-e-siemens-energy-abrem-vagas-de-estagio.ghtml",
+              "urlToImage": "https://s2-valor.glbimg.com/atyimuyHQ2RooZQGE0I-zMZiuEg=/1200x/smart/filters:cover():strip_icc()/i.s3.glbimg.com/v1/AUTH_63b422c2caee4269b8b34177e8876b93/internal_photos/bs/2026/5/I/fFKm5uSHAkWY3pK6ljHQ/pexels-tima-miroshnichenko-5198239.jpg",
+              "publishedAt": "2026-04-02T17:00:41Z",
+              "content": "Grandes empresas têm ampliado seus programas de estágio como estratégia para formar talentos desde o início da carreira. As iniciativas de Bradesco, Motiva, MSD e Siemens Energy reúnem vagas em difer… [+4924 chars]"
+            },
+            {
+              "source": {
+                "id": null,
+                "name": "Startups.com.br"
+              },
+              "author": "iurisantos",
+              "title": "Startups: Alura reforça liderança com Maurício Aniche e Leonardo Secundo",
+              "description": "Sérgio Lopes deixa o cargo de CTO da Alura e assume como CEO da Alun Future Studio, nova unidade de negócio do Grupo Alun\nThe post Startups: Alura reforça liderança com Maurício Aniche e Leonardo Secundo appeared first on InfoMoney.",
+              "url": "https://startups.com.br/danca-das-cadeiras/alura-reforca-lideranca-com-mauricio-aniche-e-leonardo-secundo/",
+              "urlToImage": "https://www.infomoney.com.br/wp-content/uploads/2026/04/Danca-das-Cadeiras-Versao-fundo-preto-Alura.webp?quality=70",
+              "publishedAt": "2026-04-02T14:10:32Z",
+              "content": "O Grupo Alun, ecossistema de educação em tecnologia e negócios do Brasil, formado por Alura, FIAP, PM3 e StartSe, anuncia mudanças estratégicas na liderança da Alura e a criação de uma nova unidade d… [+1733 chars]"
+            },
+            {
+              "source": {
+                "id": null,
+                "name": "Edivaldobrito.com.br"
+              },
+              "author": "Edivaldo Brito",
+              "title": "Desenvolvimento de Jogos: A Perspectiva da Inteligência Artificial em 2026",
+              "description": "Inteligência Artificial está mudando o desenvolvimento de jogos; descubra as verdades com insights do CEO da Embark Studios.\nO post Desenvolvimento de Jogos: A Perspectiva da Inteligência Artificial em 2026 apareceu primeiro em Blog do Edivaldo - Informações …",
+              "url": "https://www.edivaldobrito.com.br/desenvolvimento-de-jogos-a-perspectiva-da-inteligencia-artificial-em-2026/",
+              "urlToImage": null,
+              "publishedAt": "2026-04-02T11:00:49Z",
+              "content": "O futuro da Inteligência Artificial (IA) nos jogos eletrônicos é promissor, com avanços que aumentam a realismo e a interatividade das experiências dos jogadores. Com a IA, personagens não jogáveis s… [+13060 chars]"
+            },
+            {
+              "source": {
+                "id": "globo",
+                "name": "Globo"
+              },
+              "author": null,
+              "title": "IA amplia oportunidades e redefine perfis profissionais",
+              "description": "O avanço da inteligência artificial impulsiona a demanda por profissionais com habilidades digitais e analíticas, ao mesmo tempo em que redefine os perfis mais valorizados pelo mercado.",
+              "url": "https://valor.globo.com/patrocinado/dino/noticia/2026/04/01/ia-amplia-oportunidades-e-redefine-perfis-profissionais-1.ghtml",
+              "urlToImage": "https://s3.glbimg.com/v1/AUTH_63b422c2caee4269b8b34177e8876b93/public/fb_marca.png",
+              "publishedAt": "2026-04-01T20:58:03Z",
+              "content": "O avanço acelerado da inteligência artificial (IA) transforma o mercado de trabalho no Brasil, impulsionando a demanda por profissionais com habilidades digitais e analíticas. Neste contexto, a tecno… [+2023 chars]"
+            },
+            {
+              "source": {
+                "id": null,
+                "name": "Terra.com.br"
+              },
+              "author": "DINO",
+              "title": "IA amplia oportunidades e redefine perfis profissionais",
+              "description": "O avanço da inteligência artificial impulsiona a demanda por profissionais com habilidades digitais e analíticas, ao mesmo tempo em que redefine os perfis mais valorizados pelo mercado.",
+              "url": "https://www.terra.com.br/noticias/ia-amplia-oportunidades-e-redefine-perfis-profissionais,326f46c7fcc9d587aa3e8560e12a33capwkzkdwn.html",
+              "urlToImage": "https://p2.trrsf.com/image/fget/cf/1200/630/middle/images.terra.com/2026/04/01/1026797044-e5ba8918-c719-4134-b957-d6b9980da9a9.jpg",
+              "publishedAt": "2026-04-01T20:46:38Z",
+              "content": "O avanço acelerado da inteligência artificial (IA) transforma o mercado de trabalho no Brasil, impulsionando a demanda por profissionais com habilidades digitais e analíticas. Neste contexto, a tecno… [+2126 chars]"
+            },
+            {
+              "source": {
+                "id": "info-money",
+                "name": "InfoMoney"
+              },
+              "author": "Gabriel",
+              "title": "“Desejo de grandes coisas”: 50 anos de Apple pelos olhos de quem nunca saiu de lá",
+              "description": "Em 1976, o então adolescente de 14 anos Chris Espinosa ia de patinete para o trabalho, demonstrando computadores montados na casa de infância de Steve Jobs. A empresa mudou, mas ele continua lá\nThe post “Desejo de grandes coisas”: 50 anos de Apple pelos olhos…",
+              "url": "https://www.infomoney.com.br/business/global/desejo-de-grandes-coisas-50-anos-de-apple-pelos-olhos-de-quem-nunca-saiu-de-la/",
+              "urlToImage": "https://www.infomoney.com.br/wp-content/uploads/2026/04/APPLE-50-YEARS-1.jpg?quality=70",
+              "publishedAt": "2026-04-01T20:02:58Z",
+              "content": "CUPERTINO, Califórnia Em 1976, Chris Espinosa percorria de mobilete Puch cerca de dois quilômetros e meio toda quarta-feira à tarde, estacionava e ia trabalhar. Com apenas 14 anos, ele ainda precisav… [+7099 chars]"
+            },
+            {
+              "source": {
+                "id": "globo",
+                "name": "Globo"
+              },
+              "author": null,
+              "title": "DIVIA Marketing Digital participa da Gramado Summit 2026",
+              "description": "A DIVIA Marketing Digital participará pelo quinto ano consecutivo do Gramado Summit 2026, que acontece de 6 a 8 de maio, no Serra Park, em Gramado (RS). Em sua nova edição, o evento deve reunir mais de 25 mil participantes, além de centenas de empresas e pale…",
+              "url": "https://valor.globo.com/patrocinado/dino/noticia/2026/04/01/divia-marketing-digital-participa-da-gramado-summit-2026-1.ghtml",
+              "urlToImage": "https://s3.glbimg.com/v1/AUTH_63b422c2caee4269b8b34177e8876b93/public/fb_marca.png",
+              "publishedAt": "2026-04-01T17:40:57Z",
+              "content": "A DIVIA Marketing Digital confirma sua participação no Gramado Summit 2026 pelo quinto ano consecutivo, reforçando seu posicionamento em um dos principais encontros de inovação, tecnologia e empreend… [+3280 chars]"
+            },
+            {
+              "source": {
+                "id": "globo",
+                "name": "Globo"
+              },
+              "author": null,
+              "title": "Perfumaria avança com consumo orientado por identidade",
+              "description": "Inovação e novos hábitos de consumo, como busca por variedade e personalização, impulsionam a fase de amadurecimento do setor. Especialista da Gold Glow destaca avanço de fragrâncias de nicho e do e-commerce como canal de descoberta e compra.",
+              "url": "https://valor.globo.com/patrocinado/dino/noticia/2026/04/01/perfumaria-avanca-com-consumo-orientado-por-identidade-1.ghtml",
+              "urlToImage": "https://s3.glbimg.com/v1/AUTH_63b422c2caee4269b8b34177e8876b93/public/fb_marca.png",
+              "publishedAt": "2026-04-01T15:59:45Z",
+              "content": "O mercado de perfumaria entra em 2026 em uma nova fase de amadurecimento, com crescimento impulsionado por lançamentos inovadores e formatos menores, como travel sizes de 10ml e 30ml, que favorecem a… [+5602 chars]"
+            },
+            {
+              "source": {
+                "id": "info-money",
+                "name": "InfoMoney"
+              },
+              "author": "jamilleniero",
+              "title": "MAG cresce lucro líquido em 36% em 2025 e reorganiza estrutura para apoiar expansão",
+              "description": "Com lucro recorde, MAG aposta em tecnologia e nova governança para avançar; companhia projeta alta de dois dígitos em 2026 e presença em 100 cidades \nThe post MAG cresce lucro líquido em 36% em 2025 e reorganiza estrutura para apoiar expansão appeared first o…",
+              "url": "https://www.infomoney.com.br/minhas-financas/mag-cresce-lucro-liquido-em-36-em-2025-e-reorganiza-estrutura-para-apoiar-expansao/",
+              "urlToImage": "https://www.infomoney.com.br/wp-content/uploads/2026/04/Helder-Molina-divulgacao-MAG.jpg?quality=70",
+              "publishedAt": "2026-04-01T15:52:40Z",
+              "content": "O Grupo MAG encerrou 2025 com resultados financeiros recordes e uma reorganização interna que sinaliza uma nova fase de crescimento e reposicionamento no mercado de seguros. Para 2026, a companhia ap… [+4900 chars]"
+            },
+            {
+              "source": {
+                "id": null,
+                "name": "Startupi.com.br"
+              },
+              "author": "Marystela Barbosa",
+              "title": "Nuvidio capta R$ 6 milhões com liderança da DOMO.VC e planeja expansão na América Latina",
+              "description": "Startupi\n\nNuvidio capta R$ 6 milhões com liderança da DOMO.VC e planeja expansão na América Latina\nA Nuvidio levantou R$ 6 milhões em uma rodada pós-seed liderada pela DOMO.VC, com participação dos investidores-anjo Rei Carvalho e Amador Testa. Com o novo apo…",
+              "url": "https://startupi.com.br/nuvidio-capta-r-6-milhoes/",
+              "urlToImage": "https://startupi.com.br/wp-content/uploads/2026/04/aporte-nuvidio-1024x684.jpeg",
+              "publishedAt": "2026-04-01T13:52:24Z",
+              "content": "A Nuvidio levantou R$ 6 milhões em uma rodada pós-seed liderada pela DOMO.VC, com participação dos investidores-anjo Rei Carvalho e Amador Testa. Com o novo aporte, a empresa passa a somar R$ 10 milh… [+2956 chars]"
+            },
+            {
+              "source": {
+                "id": "info-money",
+                "name": "InfoMoney"
+              },
+              "author": "iurisantos",
+              "title": "Grupo de Semenzato investe R$ 20 milhões em empresa de saúde e se torna minoritário",
+              "description": "BeneMed, intermediária de serviços de saúde a baixos custos, receberá aporte em três anos\nThe post Grupo de Semenzato investe R$ 20 milhões em empresa de saúde e se torna minoritário appeared first on InfoMoney.",
+              "url": "https://www.infomoney.com.br/business/grupo-de-semenzato-investe-r-20-milhoes-em-empresa-de-saude-e-se-torna-minoritario/",
+              "urlToImage": "https://www.infomoney.com.br/wp-content/uploads/2020/03/semenzatobaixa.jpg?fit=808%2C539&quality=70&strip=all",
+              "publishedAt": "2026-04-01T09:00:00Z",
+              "content": "O Grupo SMZTO, do empresário José Carlos Semenzato, investirá R$ 20 milhões na healthtech BeneMed, intermediária de serviços de saúde a baixos custos. O aporte será feito no decorrer de três anos, qu… [+3140 chars]"
+            },
+            {
+              "source": {
+                "id": null,
+                "name": "Edivaldobrito.com.br"
+              },
+              "author": "Edivaldo Brito",
+              "title": "Especificações do Intel Wildcat Lake vazadas, novidades do Pixel 11 e e-reader Bookshop.org",
+              "description": "Wildcat Lake e Intel serão protagonistas com vazamentos reveladores sobre tecnologias e e-readers compráveis. Confira!\nO post Especificações do Intel Wildcat Lake vazadas, novidades do Pixel 11 e e-reader Bookshop.org apareceu primeiro em Blog do Edivaldo - I…",
+              "url": "https://www.edivaldobrito.com.br/especificacoes-do-intel-wildcat-lake-vazadas-novidades-do-pixel-11-e-e-reader-bookshop-org/",
+              "urlToImage": null,
+              "publishedAt": "2026-04-01T03:19:39Z",
+              "content": "Os vazamentos no mercado de eletrônicos geram grande expectativa entre consumidores e empresas, afetando suas estratégias e decisões. Eles criam ansiedade sobre lançamentos e influenciam como as marc… [+10795 chars]"
+            },
+            {
+              "source": {
+                "id": "globo",
+                "name": "Globo"
+              },
+              "author": null,
+              "title": "Apple faz 50 anos após revolucionar a tecnologia — e agora precisa provar seu papel na era da IA",
+              "description": "Steve Jobs\nASSOCIATED PRESS\nA Apple comemora seu 50º aniversário em um momento em que a inteligência artificial (IA) desafia a empresa a mostrar que ainda é capaz de lançar uma inovação com potencial de provocar uma transformação cultural.\nSteve Jobs, um gêni…",
+              "url": "https://g1.globo.com/tecnologia/noticia/2026/04/01/apple-faz-50-anos-apos-revolucionar-a-tecnologia-e-agora-precisa-provar-seu-papel-na-era-da-ia.ghtml",
+              "urlToImage": "https://s2-g1.glbimg.com/YlwuPxPGUuifAsCu-IrWS4ciAhg=/1280x0/filters:format(jpeg)/https://s04.video.glbimg.com/x720/992055.jpg",
+              "publishedAt": "2026-04-01T03:01:16Z",
+              "content": "Steve Jobs, um gênio do marketing, e Steve Wozniak, cofundador da Apple, revolucionaram a forma como as pessoas utilizam a tecnologia na era da internet e construíram uma empresa que hoje vale mais d… [+4680 chars]"
+            },
+            {
+              "source": {
+                "id": null,
+                "name": "Terra.com.br"
+              },
+              "author": "The Music Journal Brazil",
+              "title": "Como uma rádio pirata salvou o rock no Reino Unido",
+              "description": "Investigação sobre as embarcações rebeldes que desafiaram o monopólio estatal para colocar as guitarras de artistas icônicos no topo das paradas globais",
+              "url": "https://www.terra.com.br/diversao/musica/meu-sonora/rock/como-uma-radio-pirata-salvou-o-rock-no-reino-unido,76a7ff79217eabc245c3618a10b841ae8hncvzen.html",
+              "urlToImage": "https://p2.trrsf.com/image/fget/cf/1200/630/middle/images.terra.com/2026/03/31/36226245-rock-reino-unido-dominio-publico.png",
+              "publishedAt": "2026-03-31T20:06:36Z",
+              "content": "O cenário é o litoral britânico no início da década de 1960. Enquanto o mundo fervilhava com a energia juvenil e o surgimento de bandas que mudariam a história da arte, o Reino Unido vivia um paradox… [+7722 chars]"
+            },
+            {
+              "source": {
+                "id": null,
+                "name": "Alura.com.br"
+              },
+              "author": "Fabrício Carraro",
+              "title": "IA para criar persona em 2026: o guia completo para profissionais de marketing",
+              "description": "Aprenda como usar IA para criar persona: tipos, ferramentas, prompts prontos, validação e como desenvolver personas baseadas em dados reais.",
+              "url": "https://www.alura.com.br/artigos/ia-para-criar-persona",
+              "urlToImage": "https://cdn-wcsm.alura.com.br/2026/03/31183118/image.jpeg",
+              "publishedAt": "2026-03-31T19:14:33Z",
+              "content": "Construir uma buyer persona sempre exigiu pesquisa, entrevistas, análise de dados de CRM e horas de consolidação manual. O resultado era um documento que, em muitos casos, ficava desatualizado antes … [+15647 chars]"
+            },
+            {
+              "source": {
+                "id": "globo",
+                "name": "Globo"
+              },
+              "author": null,
+              "title": "Conteúdo Martech fica no TOP 3 na categoria Empresa do Ano",
+              "description": "A Conteúdo Martech conquistou o terceiro lugar na categoria Empresa do Ano no Prêmio Limitless RD Station 2025, posicionando-se entre as três melhores agências parceiras do Brasil em um universo de mais de 2 mil agências parceiras da plataforma no país. O res…",
+              "url": "https://valor.globo.com/patrocinado/dino/noticia/2026/03/31/conteudo-martech-fica-no-top-3-na-categoria-empresa-do-ano-1.ghtml",
+              "urlToImage": "https://s3.glbimg.com/v1/AUTH_63b422c2caee4269b8b34177e8876b93/public/fb_marca.png",
+              "publishedAt": "2026-03-31T18:29:56Z",
+              "content": "A Conteúdo Martech, agência especializada em marketing educacional e Sistema S, conquistou o pódio na categoria Empresa do Ano do Prêmio Limitless RD Station 2025. O resultado posiciona a empresa ent… [+6598 chars]"
+            },
+            {
+              "source": {
+                "id": null,
+                "name": "Edivaldobrito.com.br"
+              },
+              "author": "Edivaldo Brito",
+              "title": "Como o Crescimento das Apps de Drama Curto Está Transformando o Entretenimento no Android",
+              "description": "Short Drama está mudando a forma como consumimos entretenimento no Android. Veja como esse crescimento impacta o mercado!\nO post Como o Crescimento das Apps de Drama Curto Está Transformando o Entretenimento no Android apareceu primeiro em Blog do Edivaldo - …",
+              "url": "https://www.edivaldobrito.com.br/como-o-crescimento-das-apps-de-drama-curto-esta-transformando-o-entretenimento-no-android/",
+              "urlToImage": null,
+              "publishedAt": "2026-03-31T11:40:29Z",
+              "content": "O futuro do entretenimento no Android será moldado por inovações como inteligência artificial, que proporcionará recomendações personalizadas, e tecnologias de realidade aumentada e virtual, que perm… [+10082 chars]"
+            },
+            {
+              "source": {
+                "id": "info-money",
+                "name": "InfoMoney"
+              },
+              "author": "armandopereira",
+              "title": "Quando o Apple Watch vira seu chefe: a obsessão por frequência cardíaca no escritório",
+              "description": "Funcionários estão ficando obcecados em otimizar o ritmo do coração em seus trabalhos, e há dúvidas se isso é necessário\nThe post Quando o Apple Watch vira seu chefe: a obsessão por frequência cardíaca no escritório appeared first on InfoMoney.",
+              "url": "https://www.infomoney.com.br/business/global/quando-o-apple-watch-vira-seu-chefe-a-obsessao-por-frequencia-cardiaca-no-escritorio/",
+              "urlToImage": "https://www.infomoney.com.br/wp-content/uploads/2026/03/WORKPLACE-FITNESS-TRACKING_b.jpg?fit=1740%2C2250&quality=70&strip=all",
+              "publishedAt": "2026-03-31T08:00:00Z",
+              "content": "O doutor Ravi Solanki obteve um diploma de medicina e um Ph.D. na Universidade de Cambridge e trabalhou em uma unidade de terapia intensiva durante a pandemia. Mas foi só no ano passado, não muito de… [+9417 chars]"
+            },
+            {
+              "source": {
+                "id": null,
+                "name": "Edivaldobrito.com.br"
+              },
+              "author": "Edivaldo Brito",
+              "title": "Apple aposta no querido Little Finder Guy com novos vídeos no TikTok",
+              "description": "MacBook Neo se destaca com o novo mascote da Apple, Little Finder Guy, em vídeos curtos no TikTok. Confira!\nO post Apple aposta no querido Little Finder Guy com novos vídeos no TikTok apareceu primeiro em Blog do Edivaldo - Informações e Notícias sobre Linux.",
+              "url": "https://www.edivaldobrito.com.br/apple-aposta-no-querido-little-finder-guy-com-novos-videos-no-tiktok/",
+              "urlToImage": null,
+              "publishedAt": "2026-03-31T03:38:43Z",
+              "content": "O marketing da Apple se destaca por sua criatividade e inovação, utilizando mascotes como o Little Finder Guy para criar conexões emocionais com os consumidores. A presença da marca em redes sociais,… [+15805 chars]"
+            },
+            {
+              "source": {
+                "id": null,
+                "name": "Tupi.fm"
+              },
+              "author": "Mundo Corporativo",
+              "title": "Yubico designa Poupak Modirassari Enbom como Diretora de Marketing para acelerar o crescimento mundial e impulsionar a liderança de mercado",
+              "description": "A Yubico (NASDAQ ESTOCOLMO: YUBICO), criadora das senhas mais seguras e líder em prover chaves de segurança para autenticação por hardware, anunciou hoje a designação de Poupak Enbom como Diretora de Marketing (CMO). Este comunicado de imprensa inclui multimé…",
+              "url": "https://www.tupi.fm/mundo-corporativo/yubico-designa-poupak-modirassari-enbom-como-diretora-de-marketing-para-acelerar-o-crescimento-mundial-e-impulsionar-a-lideranca-de-mercado/",
+              "urlToImage": "https://mms.businesswire.com/media/20260330850282/pt/2760186/4/Poupak_Modirassari_Enbom-press-release-2.jpg",
+              "publishedAt": "2026-03-30T18:12:10Z",
+              "content": "A Yubico (NASDAQ ESTOCOLMO: YUBICO), criadora das senhas mais seguras e líder em prover chaves de segurança para autenticação por hardware, anunciou hoje a designação de Poupak Enbom como Diretora de… [+4330 chars]"
+            },
+            {
+              "source": {
+                "id": "globo",
+                "name": "Globo"
+              },
+              "author": null,
+              "title": "Carreiras portáteis avançam e ampliam presença de brasileiros no mercado global",
+              "description": "Expansão do trabalho remoto internacional cria novas oportunidades de renda em moeda forte, mas impõe desafios jurídicos, tributários e culturais.",
+              "url": "https://valor.globo.com/patrocinado/pressworks/noticia/2026/03/30/carreiras-portateis-avancam-e-ampliam-presenca-de-brasileiros-no-mercado-global-2.ghtml",
+              "urlToImage": "https://s3.glbimg.com/v1/AUTH_63b422c2caee4269b8b34177e8876b93/public/fb_marca.png",
+              "publishedAt": "2026-03-30T17:20:47Z",
+              "content": "A popularização do trabalho remoto nos últimos anos abriu espaço para o avanço das chamadas \"carreiras portáteis\" modelos profissionais que permitem atuar para empresas estrangeiras sem sair do Brasi… [+4930 chars]"
+            },
+            {
+              "source": {
+                "id": "globo",
+                "name": "Globo"
+              },
+              "author": null,
+              "title": "Plástico Virtual e Interplast firmam parceria estratégica",
+              "description": "A Plástico Virtual consolida seu novo posicionamento de soluções em Mídia, Agência e Prospecção B2B ao anunciar parceria exclusiva com a Interplast 2026. A união visa potencializar a visibilidade das marcas expositoras antes, durante e após o evento. Com foco…",
+              "url": "https://valor.globo.com/patrocinado/dino/noticia/2026/03/30/plastico-virtual-e-interplast-firmam-parceria-estrategica-1.ghtml",
+              "urlToImage": "https://s3.glbimg.com/v1/AUTH_63b422c2caee4269b8b34177e8876b93/public/fb_marca.png",
+              "publishedAt": "2026-03-30T16:58:44Z",
+              "content": "O setor de transformação de plásticos no Brasil apresenta perspectivas otimistas para o fechamento de 2026, com a expectativa de que o faturamento atinja a marca de R$ 168 bilhões, segundo a Associaç… [+2614 chars]"
+            },
+            {
+              "source": {
+                "id": null,
+                "name": "Abril.com.br"
+              },
+              "author": "Natalia Tiemi Hanada",
+              "title": "CBF fecha patrocínio com Google para uso de inteligência artificial nas seleções",
+              "description": "Empresa de tecnologia se junta a outras marcas anunciadas neste ano de Copa do Mundo",
+              "url": "https://veja.abril.com.br/esporte/cbf-fecha-patrocinio-com-google-para-uso-de-inteligencia-artificial-nas-selecoes/",
+              "urlToImage": "https://veja.abril.com.br/wp-content/uploads/2025/05/GettyImages-1321152345.jpg?quality=70&strip=info&resize=1080,565&crop=1",
+              "publishedAt": "2026-03-30T16:34:01Z",
+              "content": "Pular para o conteúdo\r\nOferta Relâmpago: VEJA por apenas 9,90Sede da CBF no Rio de Janeiro (Buda Mendes/Getty Images)\r\nContinua após publicidade\r\n<ul><li>A CBF e o Google fecharam patrocínio às véspe… [+1652 chars]"
+            },
+            {
+              "source": {
+                "id": "globo",
+                "name": "Globo"
+              },
+              "author": null,
+              "title": "Gestão de benefícios avança e vira estratégia empresarial",
+              "description": "Sistema integrado a aplicativos e cartões centraliza gestão dos gastos corporativos, oferecendo maior controle para as empresas e mais autonomia para colaboradores",
+              "url": "https://valor.globo.com/patrocinado/dino/noticia/2026/03/30/gestao-de-beneficios-avanca-e-vira-estrategia-empresarial-1.ghtml",
+              "urlToImage": "https://s3.glbimg.com/v1/AUTH_63b422c2caee4269b8b34177e8876b93/public/fb_marca.png",
+              "publishedAt": "2026-03-30T16:23:57Z",
+              "content": "O mercado corporativo passa por transformações significativas nos últimos anos, impulsionadas principalmente pela tecnologia e, mais recentemente, pela Inteligência Artificial (IA). As mudanças vêm p… [+6160 chars]"
+            },
+            {
+              "source": {
+                "id": null,
+                "name": "Terra.com.br"
+              },
+              "author": "Xataka",
+              "title": "Em menos de dois anos, este novo fabricante de carros elétricos já é lucrativo",
+              "description": "É um feito que poucos fabricantes do setor automotivo podem ostentar; menos de dois anos após o lançamento de seu primeiro modelo elétrico, uma novata já está dando lucro; Impulsionado pelo rápido crescimento das vendas e por uma estratégia industrial não con…",
+              "url": "https://www.terra.com.br/mobilidade/em-menos-de-dois-anos-este-novo-fabricante-de-carros-eletricos-ja-e-lucrativo,1a37725d3bdee05158f174c3214a2571k9p0nafj.html",
+              "urlToImage": "https://p2.trrsf.com/image/fget/cf/1200/630/middle/images.terra.com/2026/03/30/321377684-13662000.jpeg",
+              "publishedAt": "2026-03-30T15:24:50Z",
+              "content": "A indústria automotiva é conhecida por seus longos ciclos e investimentos colossais. No entanto, novos participantes parecem estar acelerando o ritmo, ao mesmo tempo que miram nos fabricantes tradici… [+1276 chars]"
+            },
+            {
+              "source": {
+                "id": "globo",
+                "name": "Globo"
+              },
+              "author": null,
+              "title": "Inteligência artificial e saúde: visão computacional amplia a disputa por escala no bem-estar digital",
+              "description": "Com 78% dos brasileiros interessados em serviços de saúde digital e o capital voltando a fluir para healthtechs no exterior, plataformas como a Tafity apostam em tecnologia nacional para simplificar treino, alimentação e monitoramento de hábitos.",
+              "url": "https://valor.globo.com/patrocinado/pulse-brand/noticia/2026/03/30/inteligencia-artificial-e-saude-visao-computacional-amplia-a-disputa-por-escala-no-bemestar-digital-1.ghtml",
+              "urlToImage": "https://s3.glbimg.com/v1/AUTH_63b422c2caee4269b8b34177e8876b93/public/fb_marca.png",
+              "publishedAt": "2026-03-30T14:51:43Z",
+              "content": "A inteligência artificial aplicada à saúde começa a avançar para além dos ambientes hospitalares e das grandes plataformas clínicas. Uma nova frente de crescimento se desenha no mercado de bem-estar … [+4009 chars]"
+            },
+            {
+              "source": {
+                "id": null,
+                "name": "Edivaldobrito.com.br"
+              },
+              "author": "Edivaldo Brito",
+              "title": "Microsoft descarta campanha polêmica da marca Xbox sob nova direção",
+              "description": "Xbox é a nova aposta da Microsoft com a liderança de Asha Sharma, neste artigo, entenda a mudança!\nO post Microsoft descarta campanha polêmica da marca Xbox sob nova direção apareceu primeiro em Blog do Edivaldo - Informações e Notícias sobre Linux.",
+              "url": "https://www.edivaldobrito.com.br/microsoft-descarta-campanha-polemica-da-marca-xbox-sob-nova-direcao/",
+              "urlToImage": null,
+              "publishedAt": "2026-03-30T12:31:02Z",
+              "content": "A nova fase da Xbox, liderada por Asha Sharma, tem gerado altas expectativas entre fãs e analistas de mercado. A estratégia foca em inclusão, inovação e uma forte conexão com a comunidade gamer. Asha… [+11229 chars]"
+            },
+            {
+              "source": {
+                "id": null,
+                "name": "Edivaldobrito.com.br"
+              },
+              "author": "Edivaldo Brito",
+              "title": "A Ascensão da Apple nos Mercados Asiáticos em 2026",
+              "description": "Mercados Asiáticos são fundamentais para a Apple, com crescimento significativo em iPhone na China e Japão!\nO post A Ascensão da Apple nos Mercados Asiáticos em 2026 apareceu primeiro em Blog do Edivaldo - Informações e Notícias sobre Linux.",
+              "url": "https://www.edivaldobrito.com.br/a-ascensao-da-apple-nos-mercados-asiaticos-em-2026/",
+              "urlToImage": null,
+              "publishedAt": "2026-03-30T11:35:35Z",
+              "content": "A Apple está experimentando um crescimento significativo na Ásia, especialmente na China, Japão e Índia. O iPhone se tornou um símbolo de status, com alta demanda nesses mercados devido à sua qualida… [+5883 chars]"
+            },
+            {
+              "source": {
+                "id": null,
+                "name": "Conjur.com.br"
+              },
+              "author": "João Ozorio de Melo",
+              "title": "Redes sociais terão de enfrentar mais de 2,4 mil ações nos EUA",
+              "description": "Ancorados em duas decisões judiciais que, durante a semana, obrigaram duas bigtechs a pagar indenizações milionárias pelos danos que causaram à saúde mental de crianças e adolescentes, milhares de peticionários se preparam, nos EUA, para uma guerra total cont…",
+              "url": "https://www.conjur.com.br/2026-mar-30/empresas-de-midia-social-terao-de-enfrentar-mais-de-24-mil-acoes-nos-eua/",
+              "urlToImage": "https://www.conjur.com.br/wp-content/uploads/2023/17/icones-redes-sociais-telegram-google.jpeg",
+              "publishedAt": "2026-03-30T11:24:25Z",
+              "content": "Ancorados em duas decisões judiciais que, durante a semana, obrigaram duas bigtechs a pagar indenizações milionárias pelos danos que causaram à saúde mental de crianças e adolescentes, milhares de pe… [+7443 chars]"
+            },
+            {
+              "source": {
+                "id": null,
+                "name": "Metropoles.com"
+              },
+              "author": "Metrópoles",
+              "title": "Gramado Summit aposta no ser humano para discutir o futuro da inovação",
+              "description": "A Gramado Summit contará com a presença do uruguaio que sobreviveu ao acidente dos Andes em 1972 e do ator inglês Harry Kirton da série Peaky Blinders",
+              "url": "https://www.metropoles.com/conteudo-especial/gramado-summit-o-futuro-da-inovacao",
+              "urlToImage": "https://i.metroimg.com/bUtKgptfQyW1viGPeqTuDCrJAzADE4hd-NrVE9fE04E/w:1200/q:90/f:webp/plain/https://images.metroimg.com/2025/06/05180748/gramado-summit-mbuzz-1.jpeg",
+              "publishedAt": "2026-03-30T09:00:14Z",
+              "content": "De um lado, o avanço das tecnologias e da inteligência artificial. Do outro, histórias de vida que atravessam fronteiras, superações e reinvenções. Em um mundo onde todos estão conectados, a Gramado … [+3776 chars]"
+            },
+            {
+              "source": {
+                "id": null,
+                "name": "Uol.com.br"
+              },
+              "author": null,
+              "title": null,
+              "description": "Consumo do medicamento saltou 42% no Brasil no ano passado em volume e já movimenta R$ 10 bilhões",
+              "url": "https://www1.folha.uol.com.br/mercado/2026/03/caneta-emagrecedora-muda-habitos-e-gera-adaptacoes-de-roupa-a-refeicao-em-po.shtml",
+              "urlToImage": "https://f.i.uol.com.br/fotografia/2026/03/27/177466012269c72a1a3861f_1774660122_3x2_rt.jpg",
+              "publishedAt": "2026-03-29T19:51:10Z",
+              "content": "Não é só o \"cardápio Mounjaro\" dos restaurantes. A mudança provocada nos hábitos de quem consome medicamentos à base de GLP-1 (o princípio ativo das canetas emagrecedoras) já está mexendo com diferen… [+9749 chars]"
+            },
+            {
+              "source": {
+                "id": null,
+                "name": "Uol.com.br"
+              },
+              "author": "Jota Wagner",
+              "title": null,
+              "description": "Urna é resultado de parceria com a engarrafadora de bebidas Liquid Death, famosa por brincar com a morte em suas campanhas de marketing",
+              "url": "https://musicnonstop.uol.com.br/spotify-lanca-urna-funeraria-que-toca-playlist/",
+              "urlToImage": "https://musicnonstop.uol.com.br/wp-content/uploads/2026/03/Eternal-Playlist-Urn.jpeg",
+              "publishedAt": "2026-03-29T13:07:40Z",
+              "content": "Piada de mau gosto? Spotify lança urna funerária que toca ‘playlist para a eternidade’\r\nProduto é resultado de parceria com a engarrafadora de bebidas Liquid Death, famosa por brincar com a morte em … [+1910 chars]"
+            },
+            {
+              "source": {
+                "id": null,
+                "name": "Abril.com.br"
+              },
+              "author": "Redação VEJA",
+              "title": "Os relógios inteligentes que ajudam na busca do sono perfeito",
+              "description": "Eles auxiliam a mapear padrões noturnos, orientar ajustes na rotina e melhorar a qualidade do descanso, com impactos na saúde e no humor",
+              "url": "https://veja.abril.com.br/coluna/bem-estar/os-relogios-inteligentes-que-ajudam-na-busca-do-sono-perfeito/",
+              "urlToImage": "https://veja.abril.com.br/wp-content/uploads/2026/03/Stefanie-Ferracciu.jpg.jpg?quality=70&strip=info&resize=1080,565&crop=1",
+              "publishedAt": "2026-03-29T11:30:34Z",
+              "content": "Pular para o conteúdo\r\nASSINE VEJA NEGÓCIOS\r\nA diretora de RH Stefanie Ferracciu: Se durmo mal, reduzo as reuniões (Pamela Miranda/.)\r\nContinua após publicidade\r\n<ul><li>A epidemia de sono insuficien… [+7865 chars]"
+            },
+            {
+              "source": {
+                "id": null,
+                "name": "Eurisko.com.br"
+              },
+              "author": "Renê Fraga",
+              "title": "Apple contrata ex-executiva do Google para liderar marketing de IA antes de reformulação da Siri",
+              "description": "Apple reforça sua estratégia em inteligência artificial ao contratar executiva do Google e prepara uma grande transformação na Siri com novas tecnologias e integrações.",
+              "url": "https://gd.eurisko.com.br/2026/03/28/apple-contrata-ex-executiva-do-google-para-liderar-marketing-de-ia-antes-de-reformulacao-da-siri/",
+              "urlToImage": "https://gd.eurisko.com.br/wp-content/uploads/apple-siri-1024x683.jpg",
+              "publishedAt": "2026-03-28T21:36:47Z",
+              "content": "Principais destaques\r\n<ul><li>Apple contrata executiva experiente do Google para acelerar estratégia em inteligência artificial</li><li>Mudança ocorre em meio a uma grande reformulação da Siri e da e… [+2588 chars]"
+            },
+            {
+              "source": {
+                "id": null,
+                "name": "Conjur.com.br"
+              },
+              "author": "Angelo Gabriel Gramlich Pereira",
+              "title": "Lei Felca e compliance digital: o que muda na governança das empresas",
+              "description": "A Lei 15.211/2025, também chamada Lei Felca, institui o Estatuto da Criança e do Adolescente Digital, criando um regime específico de proteção de crianças e adolescentes em ambientes digitais, aplicável a todo produto ou serviço de tecnologia oferecido ou ace…",
+              "url": "https://www.conjur.com.br/2026-mar-28/lei-felca-e-compliance-digital-o-que-muda-na-governanca-das-empresas/",
+              "urlToImage": "https://www.conjur.com.br/wp-content/uploads/2025/08/Felca.jpeg",
+              "publishedAt": "2026-03-28T20:28:00Z",
+              "content": "A Lei 15.211/2025, também chamada Lei Felca, institui o Estatuto da Criança e do Adolescente Digital, criando um regime específico de proteção de crianças e adolescentes em ambientes digitais, aplicá… [+10160 chars]"
+            },
+            {
+              "source": {
+                "id": null,
+                "name": "Edivaldobrito.com.br"
+              },
+              "author": "Edivaldo Brito",
+              "title": "Oppo Pad Mini: O Tablet Potente Que Revoluciona o Mercado",
+              "description": "Descubra tudo sobre o Oppo Pad Mini, um tablet surpreendente que está prestes a chegar ao mercado. Prepare-se!\nO post Oppo Pad Mini: O Tablet Potente Que Revoluciona o Mercado apareceu primeiro em Blog do Edivaldo - Informações e Notícias sobre Linux.",
+              "url": "https://www.edivaldobrito.com.br/oppo-pad-mini-o-tablet-potente-que-revoluciona-o-mercado/",
+              "urlToImage": "https://www.edivaldobrito.com.br/wp-content/uploads/2026/03/oppo-pad-mini-o-tablet-potente-que-revoluciona-o-mercado.webp",
+              "publishedAt": "2026-03-28T20:12:30Z",
+              "content": "O Oppo Pad Mini é um tablet com design leve e especificações de alto desempenho, ideal para quem busca longa duração de bateria e qualidade de tela. Seu preço acessível e recursos, como compatibilida… [+7185 chars]"
+            },
+            {
+              "source": {
+                "id": null,
+                "name": "Edivaldobrito.com.br"
+              },
+              "author": "Edivaldo Brito",
+              "title": "Ivy Road encerra atividades após falha na captação para segundo jogo",
+              "description": "Ivy Road, estúdio por trás de Wanderstop, fecha as portas devido à falta de financiamento para seu próximo projeto.\nO post Ivy Road encerra atividades após falha na captação para segundo jogo apareceu primeiro em Blog do Edivaldo - Informações e Notícias sobr…",
+              "url": "https://www.edivaldobrito.com.br/ivy-road-encerra-atividades-apos-falha-na-captacao-para-segundo-jogo/",
+              "urlToImage": "https://www.edivaldobrito.com.br/wp-content/uploads/2026/03/ivy-road-encerra-atividades-apos-falha-na-captacao-para-segundo-jogo.webp",
+              "publishedAt": "2026-03-28T18:34:09Z",
+              "content": "O fechamento do estúdio Ivy Road e a história do jogo Wanderstop mostram os desafios enfrentados pelos desenvolvedores de jogos independentes. Apesar das dificuldades financeiras, o legado da equipe … [+13060 chars]"
+            },
+            {
+              "source": {
+                "id": null,
+                "name": "Edivaldobrito.com.br"
+              },
+              "author": "Edivaldo Brito",
+              "title": "A Revolução dos Serviços Apple: Como a Receita Continua em Alta",
+              "description": "Serviços Apple estão mudando a forma como a empresa gera receita. Descubra os fatores desse crescimento!\nO post A Revolução dos Serviços Apple: Como a Receita Continua em Alta apareceu primeiro em Blog do Edivaldo - Informações e Notícias sobre Linux.",
+              "url": "https://www.edivaldobrito.com.br/a-revolucao-dos-servicos-apple-como-a-receita-continua-em-alta/",
+              "urlToImage": "https://www.edivaldobrito.com.br/wp-content/uploads/2026/03/a-revolucao-dos-servicos-apple-como-a-receita-continua-em-alta.webp",
+              "publishedAt": "2026-03-28T03:36:00Z",
+              "content": "Os serviços da Apple têm apresentado um crescimento significativo, impulsionado pela integração perfeita do ecossistema Apple e pelas mudanças no comportamento do consumidor, que destacam a preferênc… [+8021 chars]"
+            },
+            {
+              "source": {
+                "id": null,
+                "name": "Olhardigital.com.br"
+              },
+              "author": "Rodrigo Mozelli",
+              "title": "Apple recruta ex-executiva do Google para liderar marketing de IA",
+              "description": "Executiva traz bagagem de quase dez anos na concorrente\nO post Apple recruta ex-executiva do Google para liderar marketing de IA apareceu primeiro em Olhar Digital.",
+              "url": "https://olhardigital.com.br/2026/03/27/pro/apple-recruta-ex-executiva-do-google-para-liderar-marketing-de-ia/",
+              "urlToImage": "https://olhardigital.com.br/wp-content/uploads/2026/03/apple.jpg",
+              "publishedAt": "2026-03-28T01:48:47Z",
+              "content": "A Apple confirmou, nesta sexta-feira (27), a contratação de Lilian Rincon para o cargo de vice-presidente de marketing de produtos para inteligência artificial (IA). Rincon reportará diretamente a Gr… [+1893 chars]"
+            },
+            {
+              "source": {
+                "id": null,
+                "name": "Edivaldobrito.com.br"
+              },
+              "author": "Edivaldo Brito",
+              "title": "Trailer do novo Harry Potter bate recorde na HBO com 277 milhões de visualizações",
+              "description": "Harry Potter conquista a audiência: trailer do novo série bate recorde histórico na HBO em apenas 48 horas.\nO post Trailer do novo Harry Potter bate recorde na HBO com 277 milhões de visualizações apareceu primeiro em Blog do Edivaldo - Informações e Notícias…",
+              "url": "https://www.edivaldobrito.com.br/trailer-do-novo-harry-potter-bate-recorde-na-hbo-com-277-milhoes-de-visualizacoes/",
+              "urlToImage": "https://www.edivaldobrito.com.br/wp-content/uploads/2026/03/trailer-do-novo-harry-potter-bate-recorde-na-hbo-com-277-milhoes-de-visualizacoes.webp",
+              "publishedAt": "2026-03-28T00:11:15Z",
+              "content": "O novo trailer de Harry Potter, lançado pela HBO, gerou grande repercussão, alcançando 277 milhões de visualizações em apenas 48 horas. Essa expectativa reflete o forte apelo emocional da franquia, c… [+4194 chars]"
+            },
+            {
+              "source": {
+                "id": null,
+                "name": "Terra.com.br"
+              },
+              "author": "The Music Journal Brazil",
+              "title": "Beyoncé: como a 'Queen Bey' ergueu um império bilionário",
+              "description": "A trajetória completa da artista que transformou a música global em uma plataforma de ativismo, inovação visual e recordes históricos",
+              "url": "https://www.terra.com.br/diversao/musica/meu-sonora/rb/beyonce-como-a-queen-bey-ergueu-um-imperio-bilionario,de2428deadafb2a4c8d4be8a933e62e6ctrl9vjo.html",
+              "urlToImage": "https://p2.trrsf.com/image/fget/cf/1200/630/middle/images.terra.com/2026/03/27/316660554-beyonce-2-creative-commons.png",
+              "publishedAt": "2026-03-27T18:21:35Z",
+              "content": "Falar sobre o entretenimento no século 21 e um exige, obrigatoriamente, a análise da figura de Beyoncé Giselle Knowles-Carter. Nascida em Houston, no Texas (EUA), a artista não apenas conquistou o to… [+6229 chars]"
+            },
+            {
+              "source": {
+                "id": "globo",
+                "name": "Globo"
+              },
+              "author": null,
+              "title": "Incentivos ganham protagonismo no setor de seguros",
+              "description": "Estratégias baseadas em premiação digital, metas estruturadas e comunicação direcionada ampliam produtividade, reduzem custos e redefinem a dinâmica comercial das seguradoras",
+              "url": "https://valor.globo.com/patrocinado/dino/noticia/2026/03/27/incentivos-ganham-protagonismo-no-setor-de-seguros-1.ghtml",
+              "urlToImage": "https://s3.glbimg.com/v1/AUTH_63b422c2caee4269b8b34177e8876b93/public/fb_marca.png",
+              "publishedAt": "2026-03-27T16:40:53Z",
+              "content": "Dados da Superintendência de Seguros Privados (Susep), destacados pelo Ministério da Fazenda, indicam que o setor arrecadou R$415,09 bilhões em 2025, registrando uma variação nominal de -4,75% em rel… [+5928 chars]"
+            },
+            {
+              "source": {
+                "id": "globo",
+                "name": "Globo"
+              },
+              "author": null,
+              "title": "Marketing de afiliados cresce com profissionalização",
+              "description": "À medida que mais pessoas passaram a vender online, a concorrência aumentou e o nível de profissionalização no marketing de afiliados também precisou crescer, explica Paulo Silva, CEO da Filtrify.",
+              "url": "https://valor.globo.com/patrocinado/dino/noticia/2026/03/27/marketing-de-afiliados-cresce-com-profissionalizacao-1.ghtml",
+              "urlToImage": "https://s3.glbimg.com/v1/AUTH_63b422c2caee4269b8b34177e8876b93/public/fb_marca.png",
+              "publishedAt": "2026-03-27T16:20:56Z",
+              "content": "O mercado global de marketing de afiliados deve atingir, em 2030, um tamanho de mais de US$ 38 bilhões (R$ 201 bilhões, na cotação atual), mais do que o dobro dos US$ 16 bilhões (R$ 84 bilhões) estim… [+3545 chars]"
+            },
+            {
+              "source": {
+                "id": null,
+                "name": "Edivaldobrito.com.br"
+              },
+              "author": "Edivaldo Brito",
+              "title": "Aumento de preços do PlayStation 5 confirmado para abril",
+              "description": "Aumento de preços do PlayStation 5 será efetivo em abril. Entenda as mudanças e se prepare para a nova realidade de preços!\nO post Aumento de preços do PlayStation 5 confirmado para abril apareceu primeiro em Blog do Edivaldo - Informações e Notícias sobre Li…",
+              "url": "https://www.edivaldobrito.com.br/aumento-de-precos-do-playstation-5-confirmado-para-abril/",
+              "urlToImage": "https://www.edivaldobrito.com.br/wp-content/uploads/2026/03/aumento-de-precos-do-playstation-5-confirmado-para-abril.webp",
+              "publishedAt": "2026-03-27T15:59:15Z",
+              "content": "O aumento de preços do PlayStation 5 está gerando grandes mudanças no mercado de jogos, levando os consumidores a reconsiderar suas compras. Para se preparar, é importante comprar antes do aumento, f… [+8127 chars]"
+            },
+            {
+              "source": {
+                "id": null,
+                "name": "Edivaldobrito.com.br"
+              },
+              "author": "Edivaldo Brito",
+              "title": "Sony aumenta os preços do PS5: o impacto no mercado de consoles",
+              "description": "PlayStation 5 enfrenta aumento de preços. Veja como isso pode afetar o futuro do mercado de consoles!\nO post Sony aumenta os preços do PS5: o impacto no mercado de consoles apareceu primeiro em Blog do Edivaldo - Informações e Notícias sobre Linux.",
+              "url": "https://www.edivaldobrito.com.br/sony-aumenta-os-precos-do-ps5-o-impacto-no-mercado-de-consoles-2/",
+              "urlToImage": "https://www.edivaldobrito.com.br/wp-content/uploads/2026/03/sony-aumenta-os-precos-do-ps5-o-impacto-no-mercado-de-consoles.webp",
+              "publishedAt": "2026-03-27T14:34:32Z",
+              "content": "O aumento do preço do PlayStation 5 impacta diretamente o mercado de consoles, gerando um debate entre consumidores e empresas. A Sony precisa adaptar suas estratégias de marketing, oferecendo inovaç… [+14792 chars]"
+            },
+            {
+              "source": {
+                "id": null,
+                "name": "Edivaldobrito.com.br"
+              },
+              "author": "Edivaldo Brito",
+              "title": "Sony aumenta os preços do PS5: o impacto no mercado de consoles",
+              "description": "PlayStation 5 enfrenta aumento de preços. Veja como isso pode afetar o futuro do mercado de consoles!\nO post Sony aumenta os preços do PS5: o impacto no mercado de consoles apareceu primeiro em Blog do Edivaldo - Informações e Notícias sobre Linux.",
+              "url": "https://www.edivaldobrito.com.br/sony-aumenta-os-precos-do-ps5-o-impacto-no-mercado-de-consoles/",
+              "urlToImage": "https://www.edivaldobrito.com.br/wp-content/uploads/2026/03/sony-aumenta-os-precos-do-ps5-o-impacto-no-mercado-de-consoles.webp",
+              "publishedAt": "2026-03-27T14:33:26Z",
+              "content": "O aumento do preço do PlayStation 5 impacta diretamente o mercado de consoles, gerando um debate entre consumidores e empresas. A Sony precisa adaptar suas estratégias de marketing, oferecendo inovaç… [+14792 chars]"
+            },
+            {
+              "source": {
+                "id": null,
+                "name": "Edivaldobrito.com.br"
+              },
+              "author": "Edivaldo Brito",
+              "title": "Como o Clipping Se Tornou Essencial Para o Sucesso de Criadores de Conteúdo",
+              "description": "Clipping é a chave para viralizar conteúdo. Descubra como essa prática está moldando a presença online de influenciadores.\nO post Como o Clipping Se Tornou Essencial Para o Sucesso de Criadores de Conteúdo apareceu primeiro em Blog do Edivaldo - Informações e…",
+              "url": "https://www.edivaldobrito.com.br/como-o-clipping-se-tornou-essencial-para-o-sucesso-de-criadores-de-conteudo/",
+              "urlToImage": "https://www.edivaldobrito.com.br/wp-content/uploads/2026/03/como-o-clipping-se-tornou-essencial-para-o-sucesso-de-criadores-de-conteudo.webp",
+              "publishedAt": "2026-03-27T13:12:58Z",
+              "content": "O clipping é uma ferramenta vital para monitorar a reputação de marcas e influenciadores. Ele permite coletar menções em diversos meios, possibilitando ajustes ágeis nas estratégias de comunicação. C… [+9444 chars]"
+            },
+            {
+              "source": {
+                "id": "globo",
+                "name": "Globo"
+              },
+              "author": null,
+              "title": "Premiação destaca 54 agências referências em mkt e vendas",
+              "description": "Prêmio Limitless, da RD Station, reconhece agências que integram estratégias de marketing e vendas, dados e geração de receita previsível.",
+              "url": "https://valor.globo.com/patrocinado/dino/noticia/2026/03/27/premiacao-destaca-54-agencias-referencias-em-mkt-e-vendas-1.ghtml",
+              "urlToImage": "https://s3.glbimg.com/v1/AUTH_63b422c2caee4269b8b34177e8876b93/public/fb_marca.png",
+              "publishedAt": "2026-03-27T12:41:56Z",
+              "content": "O Prêmio Limitless, realizado pela RD Station uma operação da TOTVS, empresa de tecnologia do Brasil , anunciou o ranking das 54 agências e consultorias mais bem avaliadas em seu ecossistema de parce… [+4294 chars]"
+            },
+            {
+              "source": {
+                "id": null,
+                "name": "Samsung.com"
+              },
+              "author": null,
+              "title": "Samsung potencializa a “BTS WORLD TOUR ‘ARIRANG’” com tecnologia Galaxy",
+              "description": "Com o Galaxy S26 Ultra capturando a experiência do show, Samsung convida público que comparecer à próxima turnê mundial do BTS a mergulhar completamente no espetáculo",
+              "url": "https://news.samsung.com/br/samsung-potencializa-a-bts-world-tour-arirang-com-tecnologia-galaxy",
+              "urlToImage": "https://img.global.news.samsung.com/br/wp-content/uploads/2026/03/Samsung-Mobile-Galaxy-S26-Ultra-BTS-BTS-WORLD-TOUR-%E2%80%98ARIRANG_Thumb932F.jpg",
+              "publishedAt": "2026-03-27T11:15:52Z",
+              "content": "Resumo AI\r\n<ul><li>Samsung se une à turnê mundial do BTS, “ARIRANG”, para criar uma experiência imersiva de show com a tecnologia Galaxy.</li><li>Fãs podem usar a câmera do Galaxy S26 Ultra para capt… [+3761 chars]"
+            },
+            {
+              "source": {
+                "id": "globo",
+                "name": "Globo"
+              },
+              "author": null,
+              "title": "Ecossistema de inovação amadurece e impulsiona startups em Minas",
+              "description": "Integração entre capital, hubs e políticas públicas sustenta crescimento e formação de novos negócios",
+              "url": "https://valor.globo.com/publicacoes/especiais/revista-minas-gerais/noticia/2026/03/27/ecossistema-de-inovacao-amadurece-e-impulsiona-startups-em-minas.ghtml",
+              "urlToImage": "https://s2-valor.glbimg.com/nG2b1why1c0cQcZVbywU9ACFQeM=/1200x/smart/filters:cover():strip_icc()/i.s3.glbimg.com/v1/AUTH_63b422c2caee4269b8b34177e8876b93/internal_photos/bs/2026/4/2/qpubqgRbq0pkaCN9XDmQ/revista-minas-2026-095-priscilaspadinger-aleve-foto-divulgacao.jpg",
+              "publishedAt": "2026-03-27T08:10:36Z",
+              "content": "Minas Gerais, que já conta com tradição no ecossistema de empreendedorismo brasileiro, vem apostando na manutenção de um ambiente propício para inovação que faz uma combinação entre crédito público, … [+7605 chars]"
+            },
+            {
+              "source": {
+                "id": null,
+                "name": "Ouniversodatv.com"
+              },
+              "author": "Anderson Ramos",
+              "title": "IA, expansão e conexão humana marcam debates do CMO Summit no estúdio da CNN Brasil",
+              "description": "O estúdio da CNN Brasil  no CMO Summit se transformou, nos dias 25 e 26 de março, em um ponto de encontro das principais lideranças de marke...",
+              "url": "https://www.ouniversodatv.com/2026/03/ia-expansao-e-conexao-humana-marcam.html",
+              "urlToImage": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj7SUclaouAYY_r1pQRSrmf0CZFuhAIb94s5uyaAb-8lF7Kr_CN6DH2xiTXlYDtXvsRmDP7Luqw9KZE7awHXPAWh9A_icMxc6w56NfYSpIRv9gY0Z5VL6vTTZKD89UoqnkR9l5BU9jolgeIsU9a3P9puiHfAPwh5wPizFGZZpZG6Uud8bz-QtuxI4OLAkTD/w1600/CNN%20Brasil_logoazul.png",
+              "publishedAt": "2026-03-27T00:48:00Z",
+              "content": "O estúdio da CNN Brasil no CMO Summit se transformou, nos dias 25 e 26 de março, em um ponto de encontro das principais lideranças de marketing do país. Entre entrevistas e debates, um consenso emerg… [+3516 chars]"
+            },
+            {
+              "source": {
+                "id": null,
+                "name": "Noticiasautomotivas.com.br"
+              },
+              "author": "Ricardo de Oliveira",
+              "title": "Bem distante da Era do Rádio: Novo Renault Twingo ganha o primeiro dispositivo de áudio personalizado por inteligência artificial",
+              "description": "O rádio é algo ainda presente nos automóveis e eles estão lá desde os anos 30, porém, agora o streaming parece ter dominado o áudio nos veículos, mas o velho",
+              "url": "https://www.noticiasautomotivas.com.br/bem-distante-da-era-do-radio-novo-renault-twingo-ganha-o-primeiro-dispositivo-de-audio-personalizado-por-inteligencia-artificial/",
+              "urlToImage": "https://images.noticiasautomotivas.com.br/img/f/renault-twingo-radio-ia-1.jpg",
+              "publishedAt": "2026-03-27T00:37:23Z",
+              "content": "renault twingo radio ia 1\r\nO rádio é algo ainda presente nos automóveis e eles estão lá desde os anos 30, porém, agora o streaming parece ter dominado o áudio nos veículos, mas o velho receptor de on… [+2176 chars]"
+            },
+            {
+              "source": {
+                "id": null,
+                "name": "Mundodomarketing.com.br"
+              },
+              "author": "{{Authors | raw}}",
+              "title": "Varejo do futuro: como a Magalu transforma loja física em mídia e experiência - Mundo do Marketing",
+              "description": "Com retail media, AI commerce e lojas phygital, a empresa reposiciona o papel do ponto físico e ensina sobre receita além da transação",
+              "url": "https://mundodomarketing.com.br/varejo-do-futuro-como-a-magalu-transforma-loja-fisica-em-midia-e-experiencia",
+              "urlToImage": "https://framerusercontent.com/images/KVeHp9VA5KntWedUzqexxaJ05YQ.jpg?width=1920&height=1080",
+              "publishedAt": "2026-03-26T21:58:40Z",
+              "content": "No momento em que o digital avança em ritmo acelerado, o Magalu aposta em um movimento de ressignificar o papel da loja física. 85% das transações ainda passam pelas lojas, o que reforça a relevância… [+3377 chars]"
+            },
+            {
+              "source": {
+                "id": null,
+                "name": "Terra.com.br"
+              },
+              "author": "todateen",
+              "title": "Haskell Cosméticos lança linha Frizz Cancelado com tecnologia lamelar e promessa de 80 horas antiumidade para controle extremo do frizz",
+              "description": "O frizz se consolidou como uma das principais preocupações do consumidor quando o assunto é ...",
+              "url": "https://www.terra.com.br/vida-e-estilo/autocuidado/haskell-cosmeticos-lanca-linha-frizz-cancelado-com-tecnologia-lamelar-e-promessa-de-80-horas-antiumidade-para-controle-extremo-do-frizz,aeb81618278bd4c73368cd3e23f6b844pznwbmcw.html",
+              "urlToImage": "https://p2.trrsf.com/image/fget/cf/1200/630/middle/images.terra.com/2026/03/26/1923859319-design-sem-nome-2026-03-26t175703543.png",
+              "publishedAt": "2026-03-26T21:12:40Z",
+              "content": "O frizz se consolidou como uma das principais preocupações do consumidor quando o assunto é cuidado capilar, especialmente em um cenário de aumento da umidade e de temperaturas mais elevadas. Dados d… [+2516 chars]"
+            },
+            {
+              "source": {
+                "id": null,
+                "name": "Alura.com.br"
+              },
+              "author": "Fabrício Carraro",
+              "title": "IA para prototipação em 2026: o guia completo para profissionais de design e produto",
+              "description": "Aprenda como usar IA para prototipação: ferramentas, fluxo de trabalho, prompts, cases reais e boas práticas de design com IA.",
+              "url": "https://www.alura.com.br/artigos/ia-para-prototipacao",
+              "urlToImage": "https://cdn-wcsm.alura.com.br/2026/03/26174011/image.jpeg",
+              "publishedAt": "2026-03-26T18:07:43Z",
+              "content": "Criar um protótipo costumava exigir domínio de ferramentas complexas, horas de montagem manual e ciclos longos de feedback.\r\nEm 2026, a IA para prototipação comprimiu esse processo: você descreve uma… [+13091 chars]"
+            },
+            {
+              "source": {
+                "id": null,
+                "name": "Whiplash.net"
+              },
+              "author": "Whiplash.Net",
+              "title": "Rock e Heavy Metal - lançamentos de faixas, álbuns e mais novidades",
+              "description": "Lançamentos de singles, álbuns, clipes e mais novidades de bandas de Rock e Heavy Metal; notas de assessoria de imprensa e enviadas pelas bandas.",
+              "url": "https://whiplash.net/materias/news_673/377837-lancamentos.html",
+              "urlToImage": "https://whiplash.net/imagens_promo_22/depositphotos_150805276_horns_por_tarasmalyarevich.jpg",
+              "publishedAt": "2026-03-26T18:01:00Z",
+              "content": "Abaixo, os últimos lançamentos de singles, álbuns e clipes de bandas de Rock e Heavy Metal do Brasil e do exterior, atualizados diariamente, notas de assessoria de imprensa e enviadas pelas bandas. A… [+34373 chars]"
+            },
+            {
+              "source": {
+                "id": "ign",
+                "name": "IGN"
+              },
+              "author": "Matheus Bianezzi, Jon Bolding",
+              "title": "Masters of Albion: Peter Molyneux parece estar se divertindo muito criando um God Game novamente | Preview",
+              "description": "Albion…onde já ouvimos esse nome antes…?",
+              "url": "https://br.ign.com/masters-of-albion/151852/preview/masters-of-albion-peter-molyneux-parece-estar-se-divertindo-muito-criando-um-god-game-novamente-prev",
+              "urlToImage": "https://sm.ign.com/t/ign_br/image/p/peter-moly/peter-molyneux-insists-his-new-game-isnt-set-in-the-world-of_8za7.1200.jpg",
+              "publishedAt": "2026-03-26T15:40:07Z",
+              "content": "Masters of Albion é uma visão quase nostalgicamente fofa e irreverente do gênero de jogos \"God Game\" que consagrou o veterano designer de jogos Peter Molyneux. Ele combina elementos de um jogo de con… [+9238 chars]"
+            },
+            {
+              "source": {
+                "id": "globo",
+                "name": "Globo"
+              },
+              "author": null,
+              "title": "Evento traz imersão para responder desafios de mkt e vendas",
+              "description": "Mundo RD Station acontecerá em agosto e oferecerá um encontro imersivo em que o futuro do marketing, das vendas e do atendimento no Brasil será apresentado, debatido e colocado em prática.",
+              "url": "https://valor.globo.com/patrocinado/dino/noticia/2026/03/26/evento-traz-imersao-para-responder-desafios-de-mkt-e-vendas-1.ghtml",
+              "urlToImage": "https://s3.glbimg.com/v1/AUTH_63b422c2caee4269b8b34177e8876b93/public/fb_marca.png",
+              "publishedAt": "2026-03-26T14:06:14Z",
+              "content": "A RD Station uma operação da TOTVS, empresa de tecnologia do Brasil anuncia o Mundo RD Station, um encontro que se propõe a oferecer experiências imersivas e discutir caminhos para os desafios atuais… [+2975 chars]"
+            },
+            {
+              "source": {
+                "id": "globo",
+                "name": "Globo"
+              },
+              "author": null,
+              "title": "A assessoria que está transformando escritórios de advocacia em negócios previsíveis — e por que advogados estão abandonando as agências de marketing",
+              "description": "Assessoria da SpinLaw estrutura processos, substitui marketing ineficaz, aumenta conversão com estratégia e IA, trazendo previsibilidade e crescimento sustentável",
+              "url": "https://valor.globo.com/patrocinado/pressworks/noticia/2026/03/26/a-assessoria-que-esta-transformando-escritorios-de-advocacia-em-negocios-previsiveis-e-por-que-advogados-estao-abandonando-as-agencias-de-marketing-1.ghtml",
+              "urlToImage": "https://s3.glbimg.com/v1/AUTH_63b422c2caee4269b8b34177e8876b93/public/fb_marca.png",
+              "publishedAt": "2026-03-26T13:48:48Z",
+              "content": "No fim do dia, depois de horas analisando processos, respondendo clientes e revisando prazos, muitos advogados ainda convivem com a mesma dúvida: de onde virá o próximo contrato? Não se trata de falt… [+5710 chars]"
+            },
+            {
+              "source": {
+                "id": "globo",
+                "name": "Globo"
+              },
+              "author": null,
+              "title": "Conheça a trajetória do engenheiro Ricardo Costa criação de soluções que conectam dados ao mundo real",
+              "description": "Hoje, Ricardo atua no desenvolvimento e implementação de sistemas baseados em inteligência artificial e machine learning",
+              "url": "https://valor.globo.com/patrocinado/pressworks/noticia/2026/03/26/conheca-a-trajetoria-do-engenheiro-ricardo-costa-criacao-de-solucoes-que-conectam-dados-ao-mundo-real-1.ghtml",
+              "urlToImage": "https://s3.glbimg.com/v1/AUTH_63b422c2caee4269b8b34177e8876b93/public/fb_marca.png",
+              "publishedAt": "2026-03-26T13:40:04Z",
+              "content": "A curiosidade por entender como as coisas funcionam sempre fez parte da vida do engenheiro Ricardo. Ainda criança, ele já era o responsável por resolver pequenos problemas tecnológicos em casa (da im… [+4599 chars]"
+            },
+            {
+              "source": {
+                "id": null,
+                "name": "Ig.com.br"
+              },
+              "author": "Juliana Franco, Juliana Franco",
+              "title": "Zoho no CMO Summit 2026: dados sem contexto não geram decisão",
+              "description": "Integrar áreas, processos e informação é o caminho para transformar marketing em motor real de crescimento, segundo a companhia",
+              "url": "https://ultimosegundo.ig.com.br/colunas/ideia-e-meio/2026-03-26/zoho-no-cmo-summit-2026--dados-sem-contexto-nao-geram-decisao.html",
+              "urlToImage": "https://i0.statig.com.br/bancodeimagens/7t/w9/6n/7tw96nqks6gbxhloo7de6uq4p.jpg",
+              "publishedAt": "2026-03-26T13:00:23Z",
+              "content": "No momento em que o marketing é cada vez mais cobrado por impacto direto em receita, pipeline e crescimento, a discussão deixa de ser sobre criatividade isolada e passa a girar em torno de integração… [+3263 chars]"
+            },
+            {
+              "source": {
+                "id": "info-money",
+                "name": "InfoMoney"
+              },
+              "author": "osniralves",
+              "title": "Revolução silenciosa: 97% das gestoras de recursos já adotam IA no dia a dia",
+              "description": "Desse total, 58% afirmam que a maioria dos seus funcionários já recorre à tecnologia diariamente\nThe post Revolução silenciosa: 97% das gestoras de recursos já adotam IA no dia a dia appeared first on InfoMoney.",
+              "url": "https://www.infomoney.com.br/advisor/revolucao-silenciosa-97-das-gestoras-adotam-ia-no-dia-a-dia/",
+              "urlToImage": "https://www.infomoney.com.br/wp-content/uploads/2026/03/pexels-alphatradezone-5833752-e1774470300750.jpg?fit=4240%2C2390&quality=70&strip=all",
+              "publishedAt": "2026-03-26T12:05:00Z",
+              "content": "A inteligência artificial (IA) deixou de ser experimento para virar infraestrutura. É o que mostra a primeira edição da pesquisa IA na Gestão de Recursos, produzida pelo time de Análise de Fundos da … [+3160 chars]"
+            },
+            {
+              "source": {
+                "id": "globo",
+                "name": "Globo"
+              },
+              "author": null,
+              "title": "Varejo vive momento de virada impulsionado pela inovação",
+              "description": "Evolução acelerada da IA e das arquiteturas de dados inaugura novo capítulo para o segmento em escala global",
+              "url": "https://valor.globo.com/patrocinado/deloitte/impacting-the-future/noticia/2026/03/26/varejo-vive-momento-de-virada-impulsionado-pela-inovacao.ghtml",
+              "urlToImage": "https://s2-valor.glbimg.com/kZEUz8JKNZZQUOhRbJzGcv_KlPE=/1200x/smart/filters:cover():strip_icc()/i.s3.glbimg.com/v1/AUTH_63b422c2caee4269b8b34177e8876b93/internal_photos/bs/2026/m/r/eQFMuMTBCmqGfhVZhVWg/gettyimages-1811774622.jpg",
+              "publishedAt": "2026-03-26T11:00:54Z",
+              "content": "A NRF 2026, maior evento global de varejo organizado pela National Retail Federation, realizada em janeiro em Nova Iorque (Estados Unidos), confirmou: o setor vive um ponto de inflexão orientado pela… [+5627 chars]"
+            },
+            {
+              "source": {
+                "id": "globo",
+                "name": "Globo"
+              },
+              "author": null,
+              "title": "IA chinesa inspira Brasil em saúde e regulação",
+              "description": "Parceria bilateral pode reposicionar o Brasil nas cadeias de valor digitais",
+              "url": "https://valor.globo.com/brasil/summit-valor-brazil-china-2026/noticia/2026/03/26/ia-chinesa-inspira-brasil-em-saude-e-regulacao.ghtml",
+              "urlToImage": "https://s2-valor.glbimg.com/1ynQJollwaLHaX8ThlOLr4MirGs=/1200x/smart/filters:cover():strip_icc()/i.s3.glbimg.com/v1/AUTH_63b422c2caee4269b8b34177e8876b93/internal_photos/bs/2026/U/O/2GSeyzQHqZnvLF3kr4mw/foto26rel-301-saude-a12.jpg",
+              "publishedAt": "2026-03-26T08:01:21Z",
+              "content": "A cooperação entre Brasil e China em tecnologia ganhou contornos mais concretos nesta quarta-feira (25), durante o painel Forjando o Futuro: Saúde, IA e Setores Emergentes na Colaboração Brasil-China… [+4149 chars]"
+            },
+            {
+              "source": {
+                "id": null,
+                "name": "Edivaldobrito.com.br"
+              },
+              "author": "Edivaldo Brito",
+              "title": "Brax apresenta o tablet open_slate focado em privacidade e customização",
+              "description": "Explore o novo tablet open_slate da Brax, focado em privacidade e personalização desde $469!\nO post Brax apresenta o tablet open_slate focado em privacidade e customização apareceu primeiro em Blog do Edivaldo - Informações e Notícias sobre Linux.",
+              "url": "https://www.edivaldobrito.com.br/brax-apresenta-o-tablet-open_slate-focado-em-privacidade-e-customizacao/",
+              "urlToImage": "https://www.edivaldobrito.com.br/wp-content/uploads/2026/03/brax-apresenta-o-tablet-open_slate-focado-em-privacidade-e-customizacao.webp",
+              "publishedAt": "2026-03-26T01:20:02Z",
+              "content": "O tablet open_slate se destaca por suas funcionalidades inovadoras, como suporte a múltiplos sistemas operacionais e foco em privacidade. Equipado com um processador MediaTek Genio 720, ele oferece d… [+11426 chars]"
+            },
+            {
+              "source": {
+                "id": null,
+                "name": "Eurisko.com.br"
+              },
+              "author": "Renê Fraga",
+              "title": "Google revela como a IA já está mudando o jeito do brasileiro comprar e decidir",
+              "description": "Evento do Google mostra como a inteligência artificial está acelerando decisões de compra no Brasil e redefinindo estratégias de marketing e crescimento.",
+              "url": "https://gd.eurisko.com.br/2026/03/25/google-revela-como-a-ia-ja-esta-mudando-o-jeito-do-brasileiro-comprar-e-decidir/",
+              "urlToImage": "https://gd.eurisko.com.br/wp-content/uploads/google-logo-office-1.webp",
+              "publishedAt": "2026-03-26T01:16:34Z",
+              "content": "Principais destaques:\r\n<ul><li>Inteligência artificial já acelera decisões de compra e aumenta a confiança dos consumidores brasileiros</li><li>Evento mostra que a IA deixou de ser ferramenta e virou… [+3277 chars]"
+            },
+            {
+              "source": {
+                "id": "info-money",
+                "name": "InfoMoney"
+              },
+              "author": "Mariana Amaro",
+              "title": "Startups: Diaspora.Black avança na Europa e prepara Série A na casa dos US$ 3M",
+              "description": "Startup de afroturismo aposta em Portugal como porta de entrada internacional e quer dobrar faturamento em 2026\nThe post Startups: Diaspora.Black avança na Europa e prepara Série A na casa dos US$ 3M appeared first on InfoMoney.",
+              "url": "https://www.infomoney.com.br/business/startups-diaspora-black-avanca-na-europa-e-prepara-serie-a-na-casa-dos-us-3m/",
+              "urlToImage": "https://www.infomoney.com.br/wp-content/uploads/2026/03/diaspora.black_-950x553-1.webp?quality=70",
+              "publishedAt": "2026-03-25T22:09:01Z",
+              "content": "A Diaspora.Black, plataforma de conexão entre viajantes e experiências afrocentradas, está entrando oficialmente no mercado europeu a partir de uma base em Lisboa, Portugal. O movimento marca a expan… [+4956 chars]"
+            },
+            {
+              "source": {
+                "id": null,
+                "name": "Ig.com.br"
+              },
+              "author": "Benê Gomes, Benê Gomes",
+              "title": "MG4 Urban está confirmado para Brasil",
+              "description": "Versão mais em conta do 100% elétrico já vendido no país vai concorrer diretamente com modelos como BYD Dolphin e GWM Ora3",
+              "url": "https://carros.ig.com.br/colunas/bene-gomes/2026-03-25/mg4-urban-esta-confirmado-para-brasil.html",
+              "urlToImage": "https://i0.statig.com.br/bancodeimagens/30/6w/lv/306wlv9gfdwjs45ytvwssqcn6.jpg",
+              "publishedAt": "2026-03-25T21:30:00Z",
+              "content": "A MG Motor confirmou a chegada do MG4 Urban ao Brasil nos próximos meses, ação estratégica para ampliar sua presença no segmento de elétricos. Isso porque a versão Urban vai permitir que a marca atue… [+1569 chars]"
+            },
+            {
+              "source": {
+                "id": null,
+                "name": "Terra.com.br"
+              },
+              "author": "Estadão Conteúdo",
+              "title": "Em decisão histórica, Meta e YouTube são condenados por caso de vício em redes sociais",
+              "description": "Ação foi movida nos EUA por jovem de 20 anos que acusa empresas de criarem produtos tão viciantes quanto cigarros ou cassinos online. Meta disse discordar e que avalia opções legais; YouTube não se manifestou",
+              "url": "https://www.terra.com.br/economia/em-decisao-historica-meta-e-youtube-sao-condenados-por-caso-de-vicio-em-redes-sociais,84fb628abb173f72a076bc4407a7dd76ezteefoe.html",
+              "urlToImage": "https://s1.trrsf.com/update-1698692222/fe/zaz-mod-t360-icons/svg/logos/terra-16x9-borda.png",
+              "publishedAt": "2026-03-25T19:03:31Z",
+              "content": "A empresa de mídia social Meta e o serviço de streaming de vídeo YouTube prejudicaram uma jovem usuária com produtos que eram viciantes e a levaram a desenvolver problemas de saúde mental, segundo de… [+8004 chars]"
+            },
+            {
+              "source": {
+                "id": null,
+                "name": "Abril.com.br"
+              },
+              "author": "Bruno Andrade",
+              "title": "Regulação de apps de entrega deve elevar custos em até 25%, dizem economistas",
+              "description": "Especialistas dizem que a regulação beneficiaria parcialmente os entregadores, em detrimento de todo o restante da sociedade",
+              "url": "https://veja.abril.com.br/economia/regulacao-de-apps-de-entrega-deve-elevar-custos-em-ate-25-dizem-economistas/",
+              "urlToImage": "https://veja.abril.com.br/wp-content/uploads/2024/04/1760977_fotoarena.jpg_1.jpg?quality=70&strip=info&resize=1080,565&crop=1",
+              "publishedAt": "2026-03-25T18:40:04Z",
+              "content": "Pular para o conteúdo\r\nASSINE VEJA NEGÓCIOSEspecialistas dizem que a regulação beneficiaria parcialmente os entregadores, em detrimento de todo o restante da sociedade (Roberto Casimiro/Fotoarena/.)\r… [+5878 chars]"
+            },
+            {
+              "source": {
+                "id": null,
+                "name": "Edivaldobrito.com.br"
+              },
+              "author": "Edivaldo Brito",
+              "title": "Epic Games demite mais de 1.000 funcionários após queda no Fortnite",
+              "description": "Epic Games enfrenta crise e demite mais de 1.000 funcionários devido à queda na popularidade do Fortnite.\nO post Epic Games demite mais de 1.000 funcionários após queda no Fortnite apareceu primeiro em Blog do Edivaldo - Informações e Notícias sobre Linux.",
+              "url": "https://www.edivaldobrito.com.br/epic-games-demite-funcionarios/",
+              "urlToImage": "https://www.edivaldobrito.com.br/wp-content/uploads/2026/03/epic-games-demite-mais-de-1000-funcionarios-apos-queda-no-fortnite.webp",
+              "publishedAt": "2026-03-25T13:24:00Z",
+              "content": "A Epic Games demite mais de 1.000 funcionários após queda no número de jogadores e receita do Fortnite, buscando reestruturar a empresa para focar em inovação e crescimento sustentável na indústria d… [+7239 chars]"
+            },
+            {
+              "source": {
+                "id": "globo",
+                "name": "Globo"
+              },
+              "author": null,
+              "title": "Paraíba supera barreiras e avança na telecirurgia robótica",
+              "description": "Em dois dias, hospital de João Pessoa realizou três procedimentos inéditos na América, o que coloca o Brasil no mapa mundial de inovação em saúde.",
+              "url": "https://valor.globo.com/patrocinado/dino/noticia/2026/03/25/paraiba-supera-barreiras-e-avanca-na-telecirurgia-robotica-1.ghtml",
+              "urlToImage": "https://s3.glbimg.com/v1/AUTH_63b422c2caee4269b8b34177e8876b93/public/fb_marca.png",
+              "publishedAt": "2026-03-25T13:14:38Z",
+              "content": "Desde outubro do ano passado, já é possível realizar no Brasil uma cirurgia robótica remota com médico e paciente em cidades a quilômetros de distância. Inicialmente restritos às regiões Sul e Sudest… [+5537 chars]"
+            },
+            {
+              "source": {
+                "id": null,
+                "name": "Ig.com.br"
+              },
+              "author": "Juliana Franco, Juliana Franco",
+              "title": "Como a Spark Maxx transforma o marketing de influência no Brasil",
+              "description": "Lançamento do hub de soluções martech sinaliza uma virada no setor: influência deixa de ser intuição e passa a ser dado, estratégia e infraestrutura",
+              "url": "https://ultimosegundo.ig.com.br/colunas/ideia-e-meio/2026-03-25/como-a-spark-maxx-transforma-o-marketing-de-influencia-no-brasil.html",
+              "urlToImage": "https://i0.statig.com.br/bancodeimagens/6x/5i/o1/6x5io1zgefpncykkotpgl2bd6.jpg",
+              "publishedAt": "2026-03-25T13:00:14Z",
+              "content": "Em um mercado que cresceu rápido e, em muitos casos, sem lastro claro de resultado, o marketing de influência chega a um ponto de inflexão. Não basta mais engajar. É preciso provar impacto. É nesse c… [+3602 chars]"
+            },
+            {
+              "source": {
+                "id": null,
+                "name": "Metropoles.com"
+              },
+              "author": "Metrópoles",
+              "title": "Amazônia 4.0: a sinergia entre produzir e preservar",
+              "description": "Tecnologia, sustentabilidade e desenvolvimento formam o tripé fortalecedor do Polo Industrial de Manaus, tema central da ExpoPIM 4.0 2026",
+              "url": "https://www.metropoles.com/conteudo-especial/amazonia-4-0-a-sinergia-entre-produzir-e-preservar",
+              "urlToImage": "https://i.metroimg.com/B7YhU-hyQ6elTJizqWF3p07LGF-ov4eXjMSTWaApemg/w:1200/q:90/f:webp/plain/https://images.metroimg.com/2026/03/feira_industrial_expopim_40.jpg",
+              "publishedAt": "2026-03-25T09:00:20Z",
+              "content": "Culturalmente colorido. Ali, o ouro é verde. O solo, majoritariamente negro. E a população? Duelada pelas cores vermelha e azul – saudação especial aos manauaras pela festividade dos bois Garantido e… [+20166 chars]"
+            },
+            {
+              "source": {
+                "id": null,
+                "name": "Edivaldobrito.com.br"
+              },
+              "author": "Edivaldo Brito",
+              "title": "Novo processador Arm AGI é um marco na indústria; conheça suas inovações",
+              "description": "Arm AGI, a nova inovação da Arm para data centers, promete revolucionar o setor! Veja tudo sobre essa novidade impactante.\nO post Novo processador Arm AGI é um marco na indústria; conheça suas inovações apareceu primeiro em Blog do Edivaldo - Informações e No…",
+              "url": "https://www.edivaldobrito.com.br/novo-processador-arm-agi-e-um-marco-na-industria-conheca-suas-inovacoes/",
+              "urlToImage": "https://www.edivaldobrito.com.br/wp-content/uploads/2026/03/novo-processador-arm-agi-e-um-marco-na-industria-conheca-suas-inovacoes.webp",
+              "publishedAt": "2026-03-25T03:20:12Z",
+              "content": "As inovações tecnológicas no mercado, incluindo automação e inteligência artificial, estão revolucionando a eficiência das empresas. Essas mudanças oferecem novas oportunidades, melhorando a experiên… [+10717 chars]"
+            },
+            {
+              "source": {
+                "id": null,
+                "name": "Ouniversodatv.com"
+              },
+              "author": "Anderson Ramos",
+              "title": "Canal Markket amplia cobertura do South Summit Brazil 2026 com conteúdo multiplataforma",
+              "description": "O Canal Markket  marca presença, pelo quarto ano consecutivo, no South Summit Brazil , realizado em Porto Alegre. Acompanhando mais uma ediç...",
+              "url": "https://www.ouniversodatv.com/2026/03/canal-markket-amplia-cobertura-do-south.html",
+              "urlToImage": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEig4hwGKQOTJJA11lvz-LQsMvKoVO4CkkR8SLGOS4K8D3rk_0TpCcEMDrVBaQ121BbnDuc44h34XFGWsHUyMG_kPWi6CQ0FG2hu6Q3S4ZNc_zPC_YW2zbHh_95Pso4T3UgN6jZYxYvWpmSiLGpEjH54RW0bRR2uh4zwUvGA07G_u8Bz8yoxatZ2fgpXr70y/w1600/thumbnail%20(11).png",
+              "publishedAt": "2026-03-25T00:26:00Z",
+              "content": "O Canal Markket marca presença, pelo quarto ano consecutivo, no South Summit Brazil, realizado em Porto Alegre. Acompanhando mais uma edição de um dos principais eventos do setor na América Latina, r… [+1392 chars]"
+            },
+            {
+              "source": {
+                "id": null,
+                "name": "Mdig.com.br"
+              },
+              "author": "https://www.facebook.com/luisaocs",
+              "title": "Como os diferentes povos construíram pirâmides tão similares sem nunca terem se encontrado?",
+              "description": "A ideia de intervenção extraterrestre na construção das pirâmides ganhou força mundial após a publicação do livro \"Eram os Deuses Astronautas?\" em 1968, por Erich von Däniken. A obra popularizou a teoria de que estruturas monumentais antigas seriam complexas …",
+              "url": "https://www.mdig.com.br/index.php?itemid=60976",
+              "urlToImage": "https://imagens.mdig.com.br/mundo/piramides_colagem.jpg",
+              "publishedAt": "2026-03-24T21:45:08Z",
+              "content": "<table><tr><td></td><td>A ideia de intervenção extraterrestre na construção das pirâmides ganhou força mundial após a publicação do livro \"Eram os Deuses Astronautas?\" em 1968, por Erich von Däniken.… [+5570 chars]"
+            },
+            {
+              "source": {
+                "id": null,
+                "name": "Sapo.pt"
+              },
+              "author": "Rui Neto",
+              "title": "Epic Games vai cortar mais de 1000 postos de trabalho devido à “queda” do Fortnite",
+              "description": "A administração da Epic Games anunciou o despedimento de mais de 1000 colaboradores, justificando a medida com a diminuição dos níveis de interação no popular jogo Fortnite. Reajuste financeiro e redução de custos na...",
+              "url": "https://pplware.sapo.pt/jogos/epic-games-vai-cortar-mais-de-1000-postos-de-trabalho-devido-a-queda-do-fortnite/",
+              "urlToImage": "https://pplware.sapo.pt/wp-content/uploads/2024/10/epic_games_android_google_2.jpg",
+              "publishedAt": "2026-03-24T21:30:18Z",
+              "content": "A administração da Epic Games anunciou o despedimento de mais de 1000 colaboradores, justificando a medida com a diminuição dos níveis de interação no popular jogo Fortnite.\r\nReajuste financeiro e re… [+2142 chars]"
+            },
+            {
+              "source": {
+                "id": null,
+                "name": "Edivaldobrito.com.br"
+              },
+              "author": "Edivaldo Brito",
+              "title": "Desempenho de Marathon: vendas e mais de 70% dos jogadores no PC",
+              "description": "Marathon, o novo jogo da Bungie, teve vendas abaixo do esperado, com 70% dos jogadores no PC.\nO post Desempenho de Marathon: vendas e mais de 70% dos jogadores no PC apareceu primeiro em Blog do Edivaldo - Informações e Notícias sobre Linux.",
+              "url": "https://www.edivaldobrito.com.br/desempenho-de-marathon-vendas-e-mais-de-70-dos-jogadores-no-pc/",
+              "urlToImage": "https://www.edivaldobrito.com.br/wp-content/uploads/2026/03/desempenho-de-marathon-vendas-e-mais-de-70-dos-jogadores-no-pc.webp",
+              "publishedAt": "2026-03-24T20:58:30Z",
+              "content": "Marathon, o novo jogo da Bungie, enfrentou um início desafiador com vendas abaixo do esperado e uma recepção crítica mista. Embora muitos jogadores elogiem os gráficos, há críticas sobre a repetitivi… [+8300 chars]"
+            },
+            {
+              "source": {
+                "id": "globo",
+                "name": "Globo"
+              },
+              "author": null,
+              "title": "Lista global destaca empresas mais éticas de 2026",
+              "description": "Ranking reúne 138 empresas reconhecidas por ética corporativa em um cenário de transformação do trabalho, inteligência artificial e escassez de talentos.",
+              "url": "https://valor.globo.com/patrocinado/dino/noticia/2026/03/24/lista-global-destaca-empresas-mais-eticas-de-2026-1.ghtml",
+              "urlToImage": "https://s3.glbimg.com/v1/AUTH_63b422c2caee4269b8b34177e8876b93/public/fb_marca.png",
+              "publishedAt": "2026-03-24T20:30:06Z",
+              "content": "O ManpowerGroup foi novamente reconhecido como uma das Empresas Mais Éticas do Mundo® pelo Ethisphere, organização global referência na definição e promoção de padrões de ética corporativa. Esta é a … [+1761 chars]"
+            },
+            {
+              "source": {
+                "id": null,
+                "name": "Terra.com.br"
+              },
+              "author": "DINO",
+              "title": "Lista global destaca empresas mais éticas de 2026",
+              "description": "Ranking reúne 138 empresas reconhecidas por ética corporativa em um cenário de transformação do trabalho, inteligência artificial e escassez de talentos.",
+              "url": "https://www.terra.com.br/noticias/lista-global-destaca-empresas-mais-eticas-de-2026,2cbe7c1f55fe2c9dba1fd0ae9b24caba4vtjfwos.html",
+              "urlToImage": "https://p2.trrsf.com/image/fget/cf/1200/630/middle/images.terra.com/2026/03/24/1014310555-75da6315-4579-4887-afff-cac5ab716108.jpg",
+              "publishedAt": "2026-03-24T20:23:01Z",
+              "content": "O ManpowerGroup foi novamente reconhecido como uma das Empresas Mais Éticas do Mundo® pelo Ethisphere, organização global referência na definição e promoção de padrões de ética corporativa. Esta é a … [+1813 chars]"
+            },
+            {
+              "source": {
+                "id": null,
+                "name": "Edivaldobrito.com.br"
+              },
+              "author": "Edivaldo Brito",
+              "title": "Jensen Huang reavalia críticas sobre DLSS 5 após reação da comunidade gamer",
+              "description": "DLSS 5 é um tema quente! Jensen Huang destaca seu potencial apesar das críticas dos gamers.\nO post Jensen Huang reavalia críticas sobre DLSS 5 após reação da comunidade gamer apareceu primeiro em Blog do Edivaldo - Informações e Notícias sobre Linux.",
+              "url": "https://www.edivaldobrito.com.br/jensen-huang-reavalia-criticas-sobre-dlss-5-apos-reacao-da-comunidade-gamer/",
+              "urlToImage": "https://www.edivaldobrito.com.br/wp-content/uploads/2026/03/jensen-huang-reavalia-criticas-sobre-dlss-5-apos-reacao-da-comunidade-gamer.webp",
+              "publishedAt": "2026-03-24T19:14:11Z",
+              "content": "O DLSS 5 é uma tecnologia da Nvidia que utiliza inteligência artificial para aprimorar a qualidade gráfica dos jogos, oferecendo uma experiência de jogo superior. Com a promessa de melhorar o desempe… [+10835 chars]"
+            },
+            {
+              "source": {
+                "id": "globo",
+                "name": "Globo"
+              },
+              "author": null,
+              "title": "Epic Games vai cortar mais de 1.000 empregos por queda no uso do ‘Fortnite’",
+              "description": "Empresa também espera economizar US$ 500 milhões reduzindo os gastos com contratos e marketing e eliminando algumas vagas em aberto, disse o diretor-presidente, Tim Sweeney",
+              "url": "https://valor.globo.com/empresas/noticia/2026/03/24/epic-games-vai-cortar-mais-de-1000-empregos-por-queda-no-uso-do-fortnite.ghtml",
+              "urlToImage": "https://s2-valor.glbimg.com/ubc4QQ8HTvucmZGrhxteJ3AVNbk=/1200x/smart/filters:cover():strip_icc()/i.s3.glbimg.com/v1/AUTH_63b422c2caee4269b8b34177e8876b93/internal_photos/bs/2023/G/k/uePAlpQcu0yIgmfVcCbA/338904514.jpg",
+              "publishedAt": "2026-03-24T18:42:27Z",
+              "content": "A Epic Games vai cortar mais de 1.000 empregos após uma queda no engajamento do Fortnite, as mais recentes demissões em massa na indústria de videogames, cujo crescimento estagnou devido à incerteza … [+2506 chars]"
+            },
+            {
+              "source": {
+                "id": null,
+                "name": "Olhardigital.com.br"
+              },
+              "author": "Layse Ventura",
+              "title": "Epic Games demite mais de mil funcionários após queda de engajamento em Fortnite",
+              "description": "Em nota aos colaboradores, o CEO Tim Sweeney cita \"condições extremas\" de mercado e a necessidade de economizar US$ 500 milhões para manter a empresa financiada\nO post Epic Games demite mais de mil funcionários após queda de engajamento em Fortnite apareceu p…",
+              "url": "https://olhardigital.com.br/2026/03/24/pro/epic-games-demite-mais-de-mil-funcionarios-apos-queda-de-engajamento-em-fortnite/",
+              "urlToImage": "https://olhardigital.com.br/wp-content/uploads/2024/09/epic-games-1024x683-1.jpg",
+              "publishedAt": "2026-03-24T18:27:25Z",
+              "content": "Siga o Olhar Digital no Google Discover\r\nA crise que atinge a indústria de jogos eletrônicos acaba de fazer sua vítima mais notável até agora. A Epic Games anunciou nesta terça-feira (24) o corte de … [+1673 chars]"
+            },
+            {
+              "source": {
+                "id": "globo",
+                "name": "Globo"
+              },
+              "author": null,
+              "title": "Epic Games vai cortar mais de 1.000 empregos por queda no uso do 'Fortnite'",
+              "description": "Bruno Mars vira avatar no Fortnite Festival\nDivulgação\nA Epic Games vai cortar mais de 1.000 empregos após uma queda no engajamento do \"Fortnite\", somando-se às mais recentes demissões em massa na indústria de videogames, cujo crescimento estagnou devido à in…",
+              "url": "https://g1.globo.com/tecnologia/noticia/2026/03/24/epic-games-vai-cortar-mais-de-1000-empregos-por-queda-no-uso-do-fortnite.ghtml",
+              "urlToImage": "https://s2-g1.glbimg.com/MJVI2thw_SPd5LSYf6cHsHGWyFE=/1920x0/filters:format(jpeg)/https://i.s3.glbimg.com/v1/AUTH_59edd422c0c84a879bd37670ae4f538a/internal_photos/bs/2025/Q/k/P3AZSkRCALqgxmx9ZjRg/fortnite-festival-season-9-1920x1080-eb0d768be513.jpg",
+              "publishedAt": "2026-03-24T17:52:36Z",
+              "content": "A empresa também espera economizar US$500 milhões reduzindo os gastos com contratos e marketing e eliminando algumas vagas em aberto, disse o presidente-executivo Tim Sweeney em um comunicado aos fun… [+2326 chars]"
+            },
+            {
+              "source": {
+                "id": null,
+                "name": "Alura.com.br"
+              },
+              "author": "Fabrício Carraro",
+              "title": "IA para SEO em 2026: o guia completo para profissionais de marketing",
+              "description": "Aprenda como usar IA para SEO: ferramentas, fluxo de trabalho, criação de conteúdo otimizado e boas práticas para ranquear em 2026.",
+              "url": "https://www.alura.com.br/artigos/ia-para-seo",
+              "urlToImage": "https://cdn-wcsm.alura.com.br/2026/03/24164648/image.jpeg",
+              "publishedAt": "2026-03-24T17:12:33Z",
+              "content": "O SEO morreu? Essa pergunta aparece todo ano, e todo ano a resposta é a mesma: não.\r\nO que muda são as sempre as regras e as boas práticas mais específicas, e em 2026, o cenário de buscas combina res… [+13585 chars]"
+            },
+            {
+              "source": {
+                "id": null,
+                "name": "Terra.com.br"
+              },
+              "author": "Alto Astral",
+              "title": "Luxo árabe na pele: O Boticário une rosa turca e tecnologia em lançamento",
+              "description": "O Boticário lança Nativa SPA Rosas Secretas, unindo o poder da rosa turca à neurociência. Descubra como essa fragrância inédita desperta emoções e cuida da pele.",
+              "url": "https://www.terra.com.br/vida-e-estilo/luxo-arabe-na-pele-o-boticario-une-rosa-turca-e-tecnologia-em-lancamento,2501a02ba7f6a1115e21678fb480efaeu1rzyw66.html",
+              "urlToImage": "https://p2.trrsf.com/image/fget/cf/1200/630/middle/images.terra.com/2026/03/24/963462769-luxo-arabe-na-pele-o-boticario-une-rosa-turca-e-tecnologia-em-lancamento.jpg",
+              "publishedAt": "2026-03-24T16:51:30Z",
+              "content": "O Boticário acaba de trazer para a linha Nativa SPA uma tecnologia que vai além do cheiro bom. O lançamento Rosas Secretas utiliza arosa turca em uma parceria inédita com a neurociência para entender… [+2748 chars]"
+            }
+          ]
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "f8fa1fba-ccc3-4717-8a56-b88f90ecc9b5",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "73278b622c4b072943414a2c7eb6850b5bb4c501ed978e83da694edab81b0d08"
+  },
+  "id": "pdTkeJe2RDN363Kj",
+  "tags": []
+}
